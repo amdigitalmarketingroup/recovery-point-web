@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rpweb.25ocho.agency/sitemap-index.xml

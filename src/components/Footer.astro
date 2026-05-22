@@ -1,0 +1,155 @@
+---
+/**
+ * Site footer — 4 columns + newsletter inline + legal row.
+ *
+ * No modal popups, no Mailchimp form ghost. The newsletter form posts to a
+ * tiny mailto: + (later) a Supabase edge function. For V1 ships as a real
+ * mailto: link with subject/body pre-filled — zero cascarón.
+ */
+import { t, localizedPath, type Locale } from '@/i18n/messages'
+import { ADDRESS, EMAIL, EMAIL as _e, PHONE_NUMBER_DISPLAY, telLink, emailLink, SOCIAL, whatsappLink } from '@/lib/contact'
+import Logo from './Logo.astro'
+
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props
+const year = new Date().getFullYear()
+const wa = whatsappLink('generic')
+
+// Same `ready` flag as Header — only render footer links to pages that exist.
+const colServices = [
+  { href: localizedPath(locale, '/servicios'),         label: t(locale, 'nav.services'),                   ready: true  },
+  { href: localizedPath(locale, '/servicios/iv'),      label: 'IV Therapy',                                ready: false },
+  { href: localizedPath(locale, '/nad'),               label: 'NAD+',                                      ready: false },
+  { href: localizedPath(locale, '/servicios/masajes'), label: t(locale, 'services.items.massage.short'),   ready: false },
+  { href: localizedPath(locale, '/servicios/sauna'),   label: t(locale, 'services.items.sauna.short'),     ready: false },
+  { href: localizedPath(locale, '/servicios/cryo'),    label: t(locale, 'services.items.cryo.short'),      ready: false },
+].filter((i) => i.ready)
+
+const colCompany = [
+  { href: localizedPath(locale, '/metodo'),   label: t(locale, 'nav.method'),   ready: false },
+  { href: localizedPath(locale, '/nosotros'), label: t(locale, 'nav.team'),     ready: false },
+  { href: localizedPath(locale, '/espacio'),  label: t(locale, 'nav.space'),    ready: false },
+  { href: localizedPath(locale, '/contacto'), label: t(locale, 'nav.contact'),  ready: true  },
+  { href: localizedPath(locale, '/reservar'), label: t(locale, 'nav.reserve'),  ready: false },
+].filter((i) => i.ready)
+
+const colLegal = [
+  { href: localizedPath(locale, '/aviso-de-privacidad'), label: t(locale, 'footer.legal.privacy'), ready: false },
+  { href: localizedPath(locale, '/terminos'),            label: t(locale, 'footer.legal.terms'),   ready: false },
+].filter((i) => i.ready)
+---
+
+<footer class="relative bg-ivory-100 border-t border-cobalt-100/60">
+  <div class="container-rp section-y">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+      {/* Brand block */}
+      <div class="md:col-span-4">
+        <Logo />
+        <p class="mt-4 text-[15px] text-ink-700 max-w-xs text-pretty">
+          {t(locale, 'footer.tagline')}
+        </p>
+
+        {/* Newsletter — real mailto, no fake form */}
+        <form
+          class="mt-6 flex items-stretch max-w-sm rounded-full overflow-hidden border border-cobalt-200 bg-white focus-within:border-cobalt-600 focus-within:ring-2 focus-within:ring-cobalt-600/15 transition-colors"
+          method="get"
+          action={emailLink}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <input
+            type="email"
+            name="subject"
+            value=""
+            placeholder={t(locale, 'footer.newsletter.placeholder')}
+            aria-label={t(locale, 'footer.newsletter.placeholder')}
+            required
+            class="flex-1 px-4 h-11 bg-transparent text-[14px] text-ink-900 placeholder:text-ink-400 focus:outline-none"
+          />
+          <button
+            type="submit"
+            class="px-4 h-11 bg-cobalt-700 text-white text-[13px] font-semibold tracking-tight hover:bg-cobalt-800 transition-colors"
+          >
+            {t(locale, 'footer.newsletter.submit')}
+          </button>
+        </form>
+      </div>
+
+      {/* Services column */}
+      <nav class="md:col-span-2" aria-label="Services">
+        <p class="eyebrow mb-3">{t(locale, 'footer.columns.services')}</p>
+        <ul class="space-y-2">
+          {colServices.map((item) => (
+            <li>
+              <a href={item.href} class="text-[14px] text-ink-700 hover:text-cobalt-800 transition-colors">{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Company column */}
+      <nav class="md:col-span-2" aria-label="Company">
+        <p class="eyebrow mb-3">{t(locale, 'footer.columns.company')}</p>
+        <ul class="space-y-2">
+          {colCompany.map((item) => (
+            <li>
+              <a href={item.href} class="text-[14px] text-ink-700 hover:text-cobalt-800 transition-colors">{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Contact column */}
+      <div class="md:col-span-2">
+        <p class="eyebrow mb-3">{t(locale, 'nav.contact')}</p>
+        <ul class="space-y-2 text-[14px] text-ink-700">
+          <li>
+            <a href={telLink} class="hover:text-cobalt-800 transition-colors block">
+              {PHONE_NUMBER_DISPLAY}
+            </a>
+          </li>
+          <li>
+            <a href={emailLink} class="hover:text-cobalt-800 transition-colors block break-all">
+              {EMAIL}
+            </a>
+          </li>
+          <li>
+            <a href={wa} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-mint-600 font-semibold hover:text-mint-700 transition-colors">
+              WhatsApp →
+            </a>
+          </li>
+        </ul>
+        <p class="mt-4 text-[13px] text-ink-500 leading-relaxed">
+          {ADDRESS.street}<br />
+          {ADDRESS.colonia}<br />
+          {ADDRESS.city}, {ADDRESS.state} {ADDRESS.zip}
+        </p>
+      </div>
+
+      {/* Social column */}
+      <nav class="md:col-span-2" aria-label="Follow">
+        <p class="eyebrow mb-3">{t(locale, 'footer.columns.follow')}</p>
+        <ul class="space-y-2">
+          <li><a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer" class="text-[14px] text-ink-700 hover:text-cobalt-800 transition-colors">Instagram</a></li>
+          <li><a href={SOCIAL.facebook}  target="_blank" rel="noopener noreferrer" class="text-[14px] text-ink-700 hover:text-cobalt-800 transition-colors">Facebook</a></li>
+          <li><a href={SOCIAL.tiktok}    target="_blank" rel="noopener noreferrer" class="text-[14px] text-ink-700 hover:text-cobalt-800 transition-colors">TikTok</a></li>
+          <li><a href={SOCIAL.google}    target="_blank" rel="noopener noreferrer" class="text-[14px] text-ink-700 hover:text-cobalt-800 transition-colors">Google Maps</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    {/* Bottom row */}
+    <div class="mt-12 pt-6 border-t border-cobalt-100/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[13px] text-ink-500">
+      <p>{t(locale, 'footer.copyright', { year })}</p>
+      <div class="flex items-center gap-4">
+        {colLegal.map((item) => (
+          <a href={item.href} class="hover:text-cobalt-800 transition-colors">{item.label}</a>
+        ))}
+        <span class="text-ink-400">·</span>
+        <a href="https://25ocho.agency" target="_blank" rel="noopener noreferrer" class="hover:text-cobalt-800 transition-colors">
+          {t(locale, 'footer.builtBy')}
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

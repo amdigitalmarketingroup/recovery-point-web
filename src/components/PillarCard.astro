@@ -1,0 +1,57 @@
+---
+/**
+ * PillarCard — one of the three premium pillar cards on home + /servicios.
+ * Each card carries an eyebrow, title, description, accent chip and CTA arrow.
+ * Background is pillar-tinted; on hover lifts + reveals an arrow slide.
+ */
+import { whatsappLink, type WhatsAppIntent } from '@/lib/contact'
+
+interface Props {
+  /** Tailwind accent token; controls background tint */
+  accent: 'cobalt' | 'mint' | 'amber'
+  /** Eyebrow chip ("Para deportistas y vida activa") */
+  chip: string
+  title: string
+  description: string
+  /** WhatsApp intent fired when card clicked — keeps every card a real CTA */
+  intent: WhatsAppIntent
+  /** Optional href override (e.g. internal route /servicios?cat=recovery) */
+  href?: string
+}
+const { accent, chip, title, description, intent, href } = Astro.props as Props
+const url = href ?? whatsappLink(intent)
+const external = !href
+
+const variants: Record<Props['accent'], { bg: string; chip: string; ring: string; iconBg: string; iconText: string }> = {
+  cobalt: { bg: 'bg-cobalt-50',     chip: 'bg-cobalt-100 text-cobalt-800', ring: 'hover:ring-cobalt-300', iconBg: 'bg-cobalt-100', iconText: 'text-cobalt-700' },
+  mint:   { bg: 'bg-mint-50',       chip: 'bg-mint-100 text-mint-700',     ring: 'hover:ring-mint-300',   iconBg: 'bg-mint-100',   iconText: 'text-mint-600' },
+  amber:  { bg: 'bg-amber-200/30',  chip: 'bg-amber-300/40 text-amber-600 [color:var(--color-cobalt-800)]', ring: 'hover:ring-amber-300', iconBg: 'bg-amber-300/60', iconText: 'text-cobalt-800' },
+}
+const v = variants[accent]
+---
+
+<a
+  href={url}
+  {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+  data-reveal
+  class={`group relative flex flex-col gap-5 rounded-3xl p-7 sm:p-8 ${v.bg} ring-1 ring-cobalt-100/60 ${v.ring} hover:-translate-y-1 hover:ring-2 transition-all duration-[var(--duration-reveal)] [transition-timing-function:var(--ease-out-quart)] min-h-[280px]`}
+>
+  <div class="flex items-center justify-between">
+    <span class={`inline-flex items-center px-2.5 h-6 rounded-full text-[10px] font-bold uppercase tracking-widest ${v.chip}`}>{chip}</span>
+    <div class={`inline-flex items-center justify-center w-10 h-10 rounded-full ${v.iconBg} ${v.iconText} group-hover:scale-110 transition-transform duration-[var(--duration-micro)]`}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="flex-1">
+    <h3 class="font-display text-[28px] sm:text-[34px] font-semibold leading-[1.05] tracking-tight text-ink-900 underline-draw">
+      {title}
+    </h3>
+    <p class="mt-4 text-[15px] sm:text-[16px] text-ink-700 leading-relaxed text-pretty">
+      {description}
+    </p>
+  </div>
+</a>

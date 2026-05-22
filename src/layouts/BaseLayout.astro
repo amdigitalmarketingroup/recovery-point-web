@@ -1,0 +1,176 @@
+---
+/**
+ * BaseLayout — shared shell for every page on the site.
+ *
+ * Responsibilities:
+ *  - <html lang> set from locale prop (default es-MX, en-US otherwise)
+ *  - Fonts (Fraunces + Inter) preconnect + load (display=swap, no FOUT)
+ *  - Brand global.css imported here so every page inherits tokens
+ *  - SEO meta (title, description, OG, canonical, hreflang alternates)
+ *  - Header (sticky, with i18n switcher and mobile drawer) + Footer
+ *  - Sticky WhatsApp FAB on mobile
+ *  - Page <main> slot for the consumer to inject content
+ *
+ * Per Mario's "no cascarón" rule — every link rendered by Header/Footer
+ * routes to a real page in /src/pages.
+ */
+import { getLocaleFromPath, LOCALE_META, LOCALES, localizedPath, t, type Locale } from '@/i18n/messages'
+import { ADDRESS } from '@/lib/contact'
+import Header from '@/components/Header.astro'
+import Footer from '@/components/Footer.astro'
+import StickyWhatsApp from '@/components/StickyWhatsApp.astro'
+import '@/styles/global.css'
+
+interface Props {
+  title: string
+  description: string
+  /** Optional override for <html lang>; defaults to derived from URL */
+  locale?: Locale
+  /** Override OG image, optional */
+  ogImage?: string
+  /** Show sticky WA FAB on mobile (true by default; can be disabled on
+   *  full-bleed pages where the FAB would compete with a hero CTA) */
+  stickyWa?: boolean
+}
+
+const { title, description, locale: localeProp, ogImage = '/og-image.png', stickyWa = true } = Astro.props as Props
+
+const pathname = Astro.url.pathname
+const locale: Locale = localeProp ?? getLocaleFromPath(pathname)
+const meta = LOCALE_META[locale]
+const canonicalUrl = new URL(pathname, Astro.site ?? 'https://rpweb.25ocho.agency')
+
+// Strip locale prefix from pathname to compute hreflang alternates
+function basePath(): string {
+  let p = pathname
+  for (const l of LOCALES) {
+    if (p.startsWith(`/${l}/`)) p = p.slice(3)
+    else if (p === `/${l}`)     p = '/'
+  }
+  return p || '/'
+}
+const altPath = basePath()
+---
+
+<!DOCTYPE html>
+<html lang={meta.htmlLang} class="motion-safe:scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1F2D5A" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="canonical" href={canonicalUrl.toString()} />
+
+    {/* hreflang alternates */}
+    {LOCALES.map((l) => (
+      <link
+        rel="alternate"
+        hreflang={LOCALE_META[l].hreflang}
+        href={new URL(localizedPath(l, altPath), Astro.site ?? 'https://rpweb.25ocho.agency').toString()}
+      />
+    ))}
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(altPath, Astro.site ?? 'https://rpweb.25ocho.agency').toString()}
+    />
+
+    {/* Fonts — Fraunces (display) + Inter (body). Preconnect to reduce TTFB. */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap"
+    />
+
+    {/* SEO */}
+    <title>{title} · Recovery Point</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="IV therapy Mexicali, sueros intravenosos, NAD+, recuperación, crioterapia, sauna infrarrojo, ice plunge, masaje terapéutico, fisioterapia, Recovery Point, wellness Mexicali" />
+
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl.toString()} />
+    <meta property="og:title" content={`${title} · Recovery Point`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site ?? 'https://rpweb.25ocho.agency').toString()} />
+    <meta property="og:locale" content={meta.htmlLang.replace('-', '_')} />
+    <meta property="og:site_name" content="Recovery Point" />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} · Recovery Point`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site ?? 'https://rpweb.25ocho.agency').toString()} />
+
+    {/* JSON-LD MedicalClinic / LocalBusiness — bare minimum on every page; pages can append more */}
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': ['MedicalClinic', 'LocalBusiness'],
+      name: 'Recovery Point',
+      description,
+      url: 'https://recoverypoint.mx',
+      telephone: '+5216868437360',
+      email: 'info@recoverypoint.mx',
+      image: new URL('/og-image.png', Astro.site ?? 'https://rpweb.25ocho.agency').toString(),
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: `${ADDRESS.street}, ${ADDRESS.colonia}`,
+        addressLocality: ADDRESS.city,
+        addressRegion: ADDRESS.state,
+        postalCode: ADDRESS.zip,
+        addressCountry: 'MX',
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: ADDRESS.lat,
+        longitude: ADDRESS.lng,
+      },
+      openingHoursSpecification: [
+        { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday'], opens: '07:00', closes: '21:00' },
+        { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Saturday','Sunday'], opens: '07:00', closes: '16:00' },
+      ],
+      sameAs: [
+        'https://instagram.com/recoverypointmx',
+        'https://facebook.com/recoverypointmx',
+      ],
+      priceRange: '$$$',
+    })} />
+  </head>
+  <body>
+    {/* Skip-to-content for a11y */}
+    <a href="#main-content" class="absolute -top-10 left-2 z-50 px-3 py-1.5 bg-cobalt-700 text-white text-sm rounded focus:top-2 transition-all">
+      {locale === 'en' ? 'Skip to content' : 'Saltar al contenido'}
+    </a>
+
+    <Header locale={locale} currentPath={pathname} />
+
+    <main id="main-content" class="min-h-[60vh]">
+      <slot />
+    </main>
+
+    <Footer locale={locale} />
+    {stickyWa && <StickyWhatsApp locale={locale} />}
+
+    {/* Scroll-into-view reveal — vanilla IntersectionObserver, no React dep.
+        Components add `data-reveal` attribute and get .reveal-init/.reveal-in
+        states from global.css. */}
+    <script is:inline>
+      (function () {
+        const els = document.querySelectorAll('[data-reveal]')
+        if (!els.length) return
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('reveal-in')
+              io.unobserve(entry.target)
+            }
+          })
+        }, { threshold: 0.18, rootMargin: '0px 0px -10% 0px' })
+        els.forEach((el) => { el.classList.add('reveal-init'); io.observe(el) })
+      })()
+    </script>
+  </body>
+</html>

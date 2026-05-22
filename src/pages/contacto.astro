@@ -1,0 +1,105 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { t } from '@/i18n/messages'
+import { ADDRESS, EMAIL, PHONE_NUMBER_DISPLAY, SOCIAL, emailLink, telLink, whatsappLink } from '@/lib/contact'
+
+const locale = 'es' as const
+const wa = whatsappLink('generic')
+---
+
+<BaseLayout title={t(locale, 'nav.contact')} description={t(locale, 'contact.hero.title')}>
+  <section class="container-rp section-y">
+    <p class="eyebrow" data-reveal>{t(locale, 'contact.hero.eyebrow')}</p>
+    <h1 class="mt-4 text-[40px] sm:text-[56px] font-display font-semibold leading-[1.05] tracking-tight text-balance" data-reveal>
+      {t(locale, 'contact.hero.title')}
+    </h1>
+
+    <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
+      {/* Left: contact details */}
+      <div class="lg:col-span-5 space-y-8" data-reveal>
+        <div>
+          <p class="eyebrow mb-2">{t(locale, 'contact.phoneLabel')}</p>
+          <div class="flex flex-col gap-2">
+            <a href={wa} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 w-fit text-[22px] font-display font-semibold text-cobalt-800 hover:text-mint-600 transition-colors">
+              {PHONE_NUMBER_DISPLAY}
+              <span class="text-[12px] uppercase tracking-widest text-mint-600 px-2 py-1 rounded-full bg-mint-50">WhatsApp</span>
+            </a>
+            <a href={telLink} class="inline-flex items-center w-fit text-[14px] text-ink-500 hover:text-cobalt-700 transition-colors">
+              {t(locale, 'site.callCta')}
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <p class="eyebrow mb-2">{t(locale, 'contact.emailLabel')}</p>
+          <a href={emailLink} class="text-[18px] text-cobalt-800 hover:text-mint-600 transition-colors break-all">{EMAIL}</a>
+        </div>
+
+        <div>
+          <p class="eyebrow mb-2">{t(locale, 'nav.contact')}</p>
+          <address class="not-italic text-[16px] text-ink-700 leading-relaxed">
+            {ADDRESS.street}<br />
+            {ADDRESS.colonia}<br />
+            {ADDRESS.city}, {ADDRESS.state} {ADDRESS.zip}<br />
+            {ADDRESS.country}
+          </address>
+          <a href={ADDRESS.mapsUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 mt-3 text-[14px] font-semibold text-cobalt-700 hover:text-cobalt-800 transition-colors">
+            Abrir en Google Maps →
+          </a>
+        </div>
+
+        <div>
+          <p class="eyebrow mb-2">{t(locale, 'contact.hoursTitle')}</p>
+          <dl class="text-[15px] text-ink-700 space-y-1">
+            {t(locale, 'contact.hours').map((h: { day: string; range: string }) => (
+              <div class="flex justify-between gap-4">
+                <dt>{h.day}</dt>
+                <dd class="tabular-nums text-ink-500">{h.range}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div>
+          <p class="eyebrow mb-2">{t(locale, 'contact.parkingTitle')}</p>
+          <p class="text-[15px] text-ink-700 leading-relaxed">{t(locale, 'contact.parkingDesc')}</p>
+        </div>
+
+        <div class="flex items-center gap-3 pt-4 border-t border-cobalt-100">
+          <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-cobalt-50 text-cobalt-700 hover:bg-cobalt-100 transition-colors" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-cobalt-50 text-cobalt-700 hover:bg-cobalt-100 transition-colors" aria-label="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+          </a>
+          <a href={SOCIAL.tiktok} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-cobalt-50 text-cobalt-700 hover:bg-cobalt-100 transition-colors" aria-label="TikTok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.74a8.16 8.16 0 0 0 4.77 1.51v-3.4a4.85 4.85 0 0 1-1.84-.16z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      {/* Right: map */}
+      <div class="lg:col-span-7" data-reveal>
+        <div class="rounded-3xl overflow-hidden border border-cobalt-100 shadow-lg shadow-cobalt-900/5 aspect-[4/3] sm:aspect-[16/10]">
+          <iframe
+            title="Recovery Point — Mexicali"
+            src={`https://maps.google.com/maps?q=${ADDRESS.lat},${ADDRESS.lng}&z=16&output=embed`}
+            class="w-full h-full"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="mt-6 flex flex-col sm:flex-row gap-3">
+          <a href={wa} target="_blank" rel="noopener noreferrer" class="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-full bg-mint-500 text-white font-semibold hover:bg-mint-600 transition-colors">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+            {t(locale, 'site.whatsappCta')}
+          </a>
+          <a href={telLink} class="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-full bg-white text-cobalt-800 border border-cobalt-200 font-semibold hover:border-cobalt-400 hover:bg-cobalt-50 transition-colors">
+            {t(locale, 'site.callCta')}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

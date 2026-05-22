@@ -1,0 +1,114 @@
+---
+/**
+ * /servicios — full catalog index.
+ *
+ * Renders the 9 service entries from src/lib/services-catalog.ts as cards
+ * grouped by pillar (Recuperación / Vitalidad / Belleza). Cards link to
+ * sub-pages /servicios/{slug} which will populate in Fase 4. Until those
+ * sub-pages ship, the cards open a WA deeplink pre-typed for that service
+ * — so every card click is real, no cascarón.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { t } from '@/i18n/messages'
+import { SERVICES, type Pillar } from '@/lib/services-catalog'
+import { whatsappLink, type WhatsAppIntent } from '@/lib/contact'
+
+const locale = 'es' as const
+
+const intentByKey: Record<string, WhatsAppIntent> = {
+  iv:       'iv-generic',
+  massage:  'massage-generic',
+  sauna:    'sauna',
+  cryo:     'cryo',
+  ice:      'ice',
+  redlight: 'red-light',
+  boots:    'boots',
+  fisio:    'fisio',
+  stem:     'stem',
+}
+
+const pillarMeta: Record<Pillar, { label: string; eyebrow: string; accent: string }> = {
+  recovery:  { label: t(locale, 'home.pillars.recovery.title'),  eyebrow: t(locale, 'services.filters.recovery'), accent: 'cobalt' },
+  vitality:  { label: t(locale, 'home.pillars.vitality.title'),  eyebrow: t(locale, 'services.filters.vitality'), accent: 'amber'  },
+  beauty:    { label: t(locale, 'home.pillars.beauty.title'),    eyebrow: t(locale, 'services.filters.beauty'),   accent: 'mint'   },
+}
+
+const grouped: Record<Pillar, typeof SERVICES> = { recovery: [], vitality: [], beauty: [] }
+SERVICES.forEach((s) => grouped[s.pillar].push(s))
+
+const accentClasses: Record<string, { bg: string; chip: string; ring: string }> = {
+  cobalt:     { bg: 'bg-cobalt-50',     chip: 'bg-cobalt-100 text-cobalt-800',     ring: 'group-hover:ring-cobalt-300' },
+  periwinkle: { bg: 'bg-cobalt-50',     chip: 'bg-cobalt-100 text-cobalt-800',     ring: 'group-hover:ring-cobalt-300' },
+  mint:       { bg: 'bg-mint-50',       chip: 'bg-mint-100 text-mint-700',         ring: 'group-hover:ring-mint-300' },
+  amber:      { bg: 'bg-amber-200/30',  chip: 'bg-amber-300/50 text-cobalt-800',   ring: 'group-hover:ring-amber-300' },
+  ivory:      { bg: 'bg-ivory-100',     chip: 'bg-ivory-200 text-ink-700',         ring: 'group-hover:ring-cobalt-200' },
+}
+---
+
+<BaseLayout title={t(locale, 'nav.services')} description={t(locale, 'services.hero.subtitle')}>
+  <section class="container-rp section-y">
+    <p class="eyebrow" data-reveal>{t(locale, 'services.hero.eyebrow')}</p>
+    <h1 class="mt-4 text-[40px] sm:text-[56px] lg:text-[68px] font-display font-semibold leading-[1.05] tracking-tight text-balance max-w-4xl" data-reveal>
+      {t(locale, 'services.hero.title')}
+    </h1>
+    <p class="mt-6 max-w-2xl text-[17px] sm:text-[18px] text-ink-700 leading-relaxed text-pretty" data-reveal>
+      {t(locale, 'services.hero.subtitle')}
+    </p>
+  </section>
+
+  {(['recovery', 'vitality', 'beauty'] as Pillar[]).map((pillar) => (
+    grouped[pillar].length > 0 && (
+      <section class="container-rp pb-16 sm:pb-24">
+        <div class="flex items-baseline justify-between mb-8" data-reveal>
+          <div>
+            <p class="eyebrow">{pillarMeta[pillar].eyebrow}</p>
+            <h2 class="mt-2 text-[32px] sm:text-[40px] font-display font-semibold leading-tight">{pillarMeta[pillar].label}</h2>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {grouped[pillar].map((svc, index) => {
+            const accent = accentClasses[svc.accent]
+            const i18n = svc.i18nKey
+            const intent = intentByKey[i18n]
+            const wa = whatsappLink(intent)
+            return (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-reveal
+                style={`transition-delay: ${index * 60}ms`}
+                class={`group relative flex flex-col gap-4 rounded-3xl p-6 sm:p-7 ${accent.bg} ring-1 ring-cobalt-100/60 hover:-translate-y-1 transition-all duration-[var(--duration-reveal)] [transition-timing-function:var(--ease-out-quart)] ring-offset-2 ${accent.ring} hover:ring-2`}
+              >
+                <div class="flex items-center justify-between">
+                  <span class={`inline-flex items-center px-2 h-5 rounded-full text-[10px] font-bold uppercase tracking-widest ${accent.chip}`}>
+                    {String(SERVICES.indexOf(svc) + 1).padStart(2, '0')}
+                  </span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="text-cobalt-700 group-hover:translate-x-1 transition-transform duration-[var(--duration-micro)]" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-[24px] sm:text-[28px] font-display font-semibold leading-tight text-ink-900 underline-draw">
+                    {t(locale, `services.items.${i18n}.name`)}
+                  </h3>
+                  <p class="mt-3 text-[15px] text-ink-700 leading-relaxed">
+                    {t(locale, `services.items.${i18n}.tagline`)}
+                  </p>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-cobalt-100/60">
+                  <span class="may-help-pill">{t(locale, 'site.mayHelp')} · {t(locale, `services.items.${i18n}.chip`)}</span>
+                  <span class="text-[12px] uppercase tracking-widest text-ink-500 tabular-nums">
+                    {svc.durationMin} min
+                  </span>
+                </div>
+              </a>
+            )
+          })}
+        </div>
+      </section>
+    )
+  ))}
+</BaseLayout>

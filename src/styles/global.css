@@ -1,0 +1,247 @@
+@import "tailwindcss";
+
+/* ────────────────────────────────────────────────────────────
+   Recovery Point — design tokens (Tailwind v4 CSS-first config)
+   ────────────────────────────────────────────────────────────
+   Palette synthesises the admin's cobalt system with the official
+   brand-kit (periwinkle / indigo / teal / amber / ivory).
+   Mint stays rare per the design dossier (5% max per hero).
+   Refs: 20-Proyectos/Recovery Point - Web Redesign Plan.md §4.
+*/
+
+@theme {
+  /* Cobalt — primary brand voice (shared with admin) */
+  --color-cobalt-50: #F2F4FB;
+  --color-cobalt-100: #E1E6F4;
+  --color-cobalt-200: #C2CCE8;
+  --color-cobalt-300: #97A5D6;
+  --color-cobalt-400: #6B7DC0;
+  --color-cobalt-500: #4F61B4;
+  --color-cobalt-600: #3D4FB5;
+  --color-cobalt-700: #2D3D9A;
+  --color-cobalt-800: #1F2D5A;
+  --color-cobalt-900: #131C3A;
+
+  /* Periwinkle — brand-kit logo/wordmark */
+  --color-periwinkle-400: #8794D4;
+  --color-periwinkle-500: #5C6BC0;
+  --color-periwinkle-600: #4858B0;
+
+  /* Teal mint — accent / "MAY HELP" chips, sticky CTAs */
+  --color-mint-50: #ECF7F6;
+  --color-mint-100: #D2EDEC;
+  --color-mint-300: #7BC4BF;
+  --color-mint-500: #2D8E8A;
+  --color-mint-600: #237370;
+  --color-mint-700: #1B5A57;
+
+  /* Amber warm — NAD / premium tier */
+  --color-amber-200: #FCE4B8;
+  --color-amber-300: #F8D497;
+  --color-amber-400: #F5C97D;
+  --color-amber-600: #C8924B;
+
+  /* Ivory — premium warm surfaces */
+  --color-ivory-50: #FBF8F2;
+  --color-ivory-100: #F5EFE6;
+  --color-ivory-200: #ECE3D2;
+
+  /* Ink — text */
+  --color-ink-300: #CBD5E1;
+  --color-ink-400: #94A3B8;
+  --color-ink-500: #64748B;
+  --color-ink-700: #334155;
+  --color-ink-900: #0F172A;
+
+  /* Silver — dividers, eyebrows */
+  --color-silver-100: #F1F5F9;
+  --color-silver-200: #E5E7EB;
+  --color-silver-300: #CBD5E1;
+
+  /* Fonts */
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Easings — exact values from research dossier, do not invent */
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-panel: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Durations */
+  --duration-micro: 200ms;
+  --duration-reveal: 480ms;
+  --duration-hero: 900ms;
+}
+
+/* ────────────────────────────────────────────────────────────
+   Base typography & resets
+   ──────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    color: var(--color-ink-900);
+    background: var(--color-ivory-50);
+    min-height: 100dvh;
+    /* Mobile body: 18px min (per dossier — no 14px in marketing) */
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 640px) {
+    body { font-size: 18px; }
+  }
+
+  /* Display headings use Fraunces */
+  h1, h2, h3, h4, h5, h6,
+  .font-display {
+    font-family: var(--font-display);
+    font-feature-settings: "ss01", "ss02", "lnum";
+    letter-spacing: -0.015em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+
+  /* Italic accents in serif headings always cobalt — per pattern
+     "Tu lugar para *recuperarte*" with the verb cobalt italic */
+  h1 em, h2 em, h3 em,
+  .font-display em {
+    color: var(--color-cobalt-600);
+    font-style: italic;
+    font-feature-settings: "ss01";
+  }
+
+  ::selection {
+    background: var(--color-cobalt-600);
+    color: white;
+  }
+
+  /* Focus rings — keyboard accessibility never compromised */
+  :focus-visible {
+    outline: 2px solid var(--color-cobalt-600);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   Utility extensions
+   ──────────────────────────────────────────────────────────── */
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty  { text-wrap: pretty; }
+
+  /* Eyebrow / kicker — small uppercase label per type rules */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-mint-600);
+  }
+
+  /* Container — consistent max-width across sections */
+  .container-rp {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    max-width: 1200px;
+  }
+  @media (min-width: 640px)  { .container-rp { padding-inline: 2rem; } }
+  @media (min-width: 1024px) { .container-rp { padding-inline: 3rem; } }
+
+  /* Section vertical rhythm */
+  .section-y { padding-block: 4rem; }
+  @media (min-width: 768px)  { .section-y { padding-block: 6rem; } }
+  @media (min-width: 1024px) { .section-y { padding-block: 8rem; } }
+
+  /* "May help" pill — Restore-style benefit chip */
+  .may-help-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding-inline: 0.625rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    background: var(--color-mint-50);
+    color: var(--color-mint-700);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Premium amber pill — NAD / high-ticket badges */
+  .premium-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding-inline: 0.75rem;
+    height: 1.625rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--color-amber-300), var(--color-amber-400));
+    color: var(--color-cobalt-800);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Fade-up-on-view — used by useReveal hook */
+  .reveal-init { opacity: 0; transform: translateY(24px); }
+  .reveal-in   {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--duration-reveal) var(--ease-reveal),
+                transform var(--duration-reveal) var(--ease-reveal);
+  }
+
+  /* Marquee — used on press logos infinite loop */
+  @keyframes marquee-x {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee-x 32s linear infinite;
+  }
+  .animate-marquee:hover { animation-play-state: paused; }
+
+  /* "Underline draw" — service card hover title accent */
+  .underline-draw {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    transition: background-size 380ms var(--ease-out-quart);
+  }
+  .group:hover .underline-draw,
+  .underline-draw:hover {
+    background-size: 100% 1px;
+  }
+
+  /* Safe-area-inset helpers (for sticky WA FAB) */
+  .pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+  .pt-safe { padding-top:  env(safe-area-inset-top); }
+}
+
+/* ────────────────────────────────────────────────────────────
+   Motion-reduced respect
+   ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

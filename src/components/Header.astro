@@ -1,0 +1,202 @@
+---
+/**
+ * Site header — sticky, blurred, with mobile drawer + i18n switcher.
+ *
+ * Desktop: logo · nav · WA CTA.
+ * Mobile: logo · hamburger → full-screen drawer with nav + CTA.
+ * i18n: tiny pill switcher in top-right (desktop) / inside drawer (mobile).
+ *
+ * Every link in here resolves to a real route (we ship the routes in this
+ * same fase 0 batch) — per Mario's "no cascarón" rule.
+ */
+import { t, localizedPath, type Locale, LOCALES, LOCALE_META } from '@/i18n/messages'
+import { whatsappLink } from '@/lib/contact'
+import Logo from './Logo.astro'
+
+interface Props { locale: Locale; currentPath: string }
+const { locale, currentPath } = Astro.props as Props
+
+const wa = whatsappLink('generic')
+
+// Nav items rendered in the order Mario approved. The `ready` flag gates
+// items behind real pages — anything not ready is hidden (no cascarón).
+// As Fases 2–7 land, flip the flag here and the nav grows automatically.
+const navItems = [
+  { href: localizedPath(locale, '/servicios'), label: t(locale, 'nav.services'), ready: true  },
+  { href: localizedPath(locale, '/nad'),       label: t(locale, 'nav.nad'),      ready: false },
+  { href: localizedPath(locale, '/metodo'),    label: t(locale, 'nav.method'),   ready: false },
+  { href: localizedPath(locale, '/nosotros'),  label: t(locale, 'nav.team'),     ready: false },
+  { href: localizedPath(locale, '/espacio'),   label: t(locale, 'nav.space'),    ready: false },
+  { href: localizedPath(locale, '/contacto'),  label: t(locale, 'nav.contact'),  ready: true  },
+].filter((item) => item.ready)
+
+/** Compute equivalent path in the other locale to power the i18n switcher.
+ *  Naive: strip leading "/<locale>" from currentPath (if any), then re-prefix. */
+function pathInLocale(target: Locale): string {
+  let cleaned = currentPath
+  for (const l of LOCALES) {
+    if (cleaned.startsWith(`/${l}/`)) cleaned = cleaned.slice(3)
+    else if (cleaned === `/${l}`)     cleaned = '/'
+  }
+  return localizedPath(target, cleaned || '/')
+}
+---
+
+<header class="sticky top-0 z-30 bg-ivory-50/85 backdrop-blur-md border-b border-cobalt-100/60 pt-safe">
+  <div class="container-rp flex items-center justify-between h-16 sm:h-20">
+    <Logo />
+
+    {/* Desktop nav */}
+    <nav class="hidden lg:flex items-center gap-1" aria-label="Primary">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'px-3 py-2 text-[14px] font-medium tracking-tight rounded-full transition-colors duration-[var(--duration-micro)]',
+            currentPath === item.href || currentPath.startsWith(item.href + '/')
+              ? 'text-cobalt-800 bg-cobalt-50'
+              : 'text-ink-700 hover:text-cobalt-800 hover:bg-cobalt-50/50'
+          ]}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-2 sm:gap-3">
+      {/* i18n switcher (desktop) */}
+      <div class="hidden sm:inline-flex items-center gap-0.5 p-0.5 rounded-full bg-cobalt-50 border border-cobalt-100">
+        {LOCALES.map((l) => (
+          <a
+            href={pathInLocale(l)}
+            class:list={[
+              'px-2.5 h-7 inline-flex items-center text-[11px] font-semibold rounded-full tracking-wider transition-colors duration-[var(--duration-micro)]',
+              l === locale
+                ? 'bg-cobalt-700 text-white'
+                : 'text-ink-500 hover:text-cobalt-800'
+            ]}
+            aria-current={l === locale ? 'true' : undefined}
+          >
+            {LOCALE_META[l].label}
+          </a>
+        ))}
+      </div>
+
+      {/* CTA (desktop) */}
+      <a
+        href={wa}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden md:inline-flex items-center gap-2 h-10 px-5 rounded-full bg-cobalt-700 text-white text-[14px] font-semibold hover:bg-cobalt-800 hover:shadow-lg hover:shadow-cobalt-800/25 transition-all duration-[var(--duration-micro)] [transition-timing-function:var(--ease-out-quart)]"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+        {t(locale, 'site.whatsappCta')}
+      </a>
+
+      {/* Mobile menu button */}
+      <button
+        id="rp-menu-toggle"
+        class="lg:hidden p-2 -mr-2 rounded-full hover:bg-cobalt-50 transition-colors duration-[var(--duration-micro)]"
+        aria-label={t(locale, 'site.menuLabel')}
+        aria-expanded="false"
+        aria-controls="rp-mobile-drawer"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="6"  x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {/* Mobile drawer */}
+  <div
+    id="rp-mobile-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    class="lg:hidden fixed inset-0 z-40 bg-ivory-50 flex flex-col [opacity:0] [pointer-events:none] [transition:opacity_var(--duration-reveal)_var(--ease-panel)] data-[open=true]:[opacity:1] data-[open=true]:[pointer-events:auto] pt-safe"
+  >
+    <div class="container-rp flex items-center justify-between h-16">
+      <Logo />
+      <button
+        id="rp-menu-close"
+        class="p-2 -mr-2 rounded-full hover:bg-cobalt-50"
+        aria-label={t(locale, 'site.closeLabel')}
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6"  x2="6"  y2="18"/>
+          <line x1="6"  y1="6"  x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="container-rp flex-1 flex flex-col gap-2 mt-6" aria-label="Mobile">
+      {navItems.map((item, i) => (
+        <a
+          href={item.href}
+          class="font-display text-[28px] font-semibold text-ink-900 hover:text-cobalt-700 transition-colors py-1"
+          style={`transition-delay: ${80 + i * 30}ms`}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="container-rp pb-8 space-y-3">
+      <a
+        href={wa}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-mint-500 text-white font-semibold"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+        {t(locale, 'site.whatsappCta')}
+      </a>
+      <div class="flex items-center justify-center gap-1 pt-2">
+        {LOCALES.map((l) => (
+          <a
+            href={pathInLocale(l)}
+            class:list={[
+              'px-3 h-8 inline-flex items-center text-[11px] font-semibold rounded-full tracking-wider',
+              l === locale ? 'bg-cobalt-700 text-white' : 'text-ink-500 bg-cobalt-50'
+            ]}
+          >{LOCALE_META[l].label}</a>
+        ))}
+      </div>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  // Mobile drawer toggle + scroll lock + close-on-nav-click + Esc.
+  // Inline + lightweight — no React island needed for this purely UI logic.
+  (function () {
+    const toggle = document.getElementById('rp-menu-toggle')
+    const drawer = document.getElementById('rp-mobile-drawer')
+    const closeBtn = document.getElementById('rp-menu-close')
+    if (!toggle || !drawer) return
+    let open = false
+
+    function set(state) {
+      open = state
+      drawer.setAttribute('data-open', state ? 'true' : 'false')
+      drawer.setAttribute('aria-hidden', state ? 'false' : 'true')
+      toggle.setAttribute('aria-expanded', state ? 'true' : 'false')
+      document.body.style.overflow = state ? 'hidden' : ''
+    }
+
+    toggle.addEventListener('click', () => set(!open))
+    closeBtn && closeBtn.addEventListener('click', () => set(false))
+    // Close when clicking any nav anchor inside the drawer
+    drawer.addEventListener('click', (e) => {
+      const a = e.target.closest('a')
+      if (a) set(false)
+    })
+    // ESC closes
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && open) set(false)
+    })
+  })()
+</script>
