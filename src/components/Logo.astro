@@ -1,54 +1,43 @@
 ---
 /**
- * Recovery Point — wordmark logo.
+ * Recovery Point — official brand logo.
  *
- * Uses the official R+ mark + wordmark. SVG inline so it animates with CSS
- * without an extra HTTP fetch. The brand-kit JSON confirms cobalt 600 for
- * the wordmark / "R+" symbol; brighter periwinkle for the symbol dot.
+ * SOURCE: /public/img/logo.svg copied from `_layout-pilots/logo.svg` (official
+ * brand asset signed off 2026-05-01). Renders the full lockup (R+ symbol +
+ * "recovery point" wordmark) at 1080×1080 viewBox, scaled by the `height`
+ * prop. Inline <img> so it caches with the page.
+ *
+ * The official wordmark is part of the SVG — DO NOT add a separate text
+ * span next to it (Mario already flagged that as wrong-logo behavior).
+ *
+ * For dark backgrounds, set `inverted` true and we'll apply a CSS filter
+ * to invert the periwinkle fills to white. Cleanest approach without
+ * generating two SVG variants.
  */
 interface Props {
-  size?: number
+  /** Height in px; logo aspect is roughly 1:1 (1080×1080 incl wordmark) */
+  height?: number
   className?: string
-  /** When true, monochrome white version for cobalt backgrounds */
+  /** When true, inverts to white for dark hero backgrounds */
   inverted?: boolean
 }
-const { size = 36, className = '', inverted = false } = Astro.props as Props
-const color = inverted ? '#FFFFFF' : 'var(--color-cobalt-800)'
-const dot = inverted ? 'var(--color-mint-300)' : 'var(--color-mint-500)'
+
+const { height = 56, className = '', inverted = false } = Astro.props as Props
+const w = height // 1:1 viewbox
 ---
 
 <a
   href="/"
   aria-label="Recovery Point — inicio"
-  class={`group inline-flex items-center gap-2.5 ${className}`}
+  class={`group inline-flex items-center ${className}`}
 >
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 48 48"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    {/* Stylised R+ mark — circle background with "R" + cross "+" inside */}
-    <circle cx="24" cy="24" r="22" stroke={color} stroke-width="2" fill="none" />
-    <path
-      d="M16 13 L16 35 M16 13 L24 13 C28 13 31 16 31 20 C31 24 28 27 24 27 L16 27 L31 35"
-      stroke={color}
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      fill="none"
-    />
-    {/* Plus dot accent */}
-    <circle cx="36" cy="13" r="2.5" fill={dot} />
-    <line x1="34" y1="13" x2="38" y2="13" stroke={dot} stroke-width="1.5" stroke-linecap="round" />
-    <line x1="36" y1="11" x2="36" y2="15" stroke={dot} stroke-width="1.5" stroke-linecap="round" />
-  </svg>
-  <span
-    class="font-display text-[18px] font-semibold tracking-tight"
-    style={`color: ${color};`}
-  >
-    Recovery Point
-  </span>
+  <img
+    src="/img/logo.svg"
+    alt="Recovery Point"
+    width={w}
+    height={height}
+    style={`height: ${height}px; width: auto;` + (inverted ? ' filter: brightness(0) invert(1);' : '')}
+    class="select-none transition-opacity duration-[var(--duration-micro)] group-hover:opacity-80"
+    decoding="async"
+  />
 </a>

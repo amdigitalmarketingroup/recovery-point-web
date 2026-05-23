@@ -46,13 +46,71 @@ export const messages: Record<Locale, Messages> = {
       contact: 'Contacto',
     },
     home: {
+      chapters: {
+        iv: {
+          eyebrow: 'Protocolo médico',
+          title: 'Sueroterapia <em>intravenosa</em>.',
+          copy: 'Hidratación, energía y vitalidad celular en 45 minutos. 28 fórmulas en el menú, sala privada o compartida, enfermería certificada y especialistas del área, más botas de compresión incluidas durante toda tu sesión.',
+          imageAlt: 'Sala IV social en Recovery Point Mexicali',
+          ctaLabel: 'Ver menú de sueros',
+        },
+        nad: {
+          eyebrow: 'Longevidad',
+          title: 'NAD+ Premium <em>nivel celular</em>.',
+          copy: 'NAD+ puro, NAD+ con MVI o NAD+ con Glutatión. Regeneración mitocondrial real con la única vía intravenosa con biodisponibilidad clínica. Sesiones de 120 a 150 minutos.',
+          imageAlt: 'Sesión NAD+ premium en Recovery Point',
+          ctaLabel: 'Conocer NAD+',
+        },
+        cryo: {
+          eyebrow: 'Frío extremo',
+          title: 'Crioterapia <em>cuerpo completo</em>.',
+          copy: 'Tres minutos a -110°C en cámara de nitrógeno gaseoso. Respuesta sistémica que baja inflamación, sube endorfinas y deja el cuerpo eléctrico para entrenar o trabajar.',
+          imageAlt: 'Cámara de crioterapia en Recovery Point',
+          ctaLabel: 'Ver crioterapia',
+        },
+        ice: {
+          eyebrow: 'Inmersión guiada',
+          title: 'Tina de <em>hielo</em>.',
+          copy: 'Inmersión de 10 a 15 minutos a 5°C, con guía respiratoria. No es solo recuperación física: el ice plunge es entrenamiento de resistencia mental al estrés agudo.',
+          imageAlt: 'Tina de hielo Recovery Point en patio',
+          ctaLabel: 'Ver tina de hielo',
+        },
+        sauna: {
+          eyebrow: 'Calor profundo',
+          title: 'Sauna <em>infrarrojo</em> de cedro.',
+          copy: 'Cedro real, infrarrojo lejano, 30 minutos de sudor profundo. La diferencia con la sauna tradicional: el calor penetra directo a tus tejidos, no calienta el aire.',
+          imageAlt: 'Sauna infrarrojo de cedro en Recovery Point',
+          ctaLabel: 'Ver sauna',
+        },
+        redlight: {
+          eyebrow: 'Luz que repara',
+          title: 'Red Light <em>Bed</em>.',
+          copy: 'Cama de fotobiomodulación cuerpo completo. Longitudes 660 + 850 nm para piel, sueño y recuperación celular. 20 minutos sin esfuerzo, efectos acumulativos con uso semanal.',
+          imageAlt: 'Cama de Red Light en Recovery Point',
+          ctaLabel: 'Ver Red Light',
+        },
+        massage: {
+          eyebrow: 'Manos especializadas',
+          title: 'Cinco <em>masajes</em>.',
+          copy: 'Relajante, terapéutico, descontracturante, reflexología podal y drenaje linfático. Cada uno con su técnica, su duración y su precio. Aplicados por terapeutas con cédula y formación específica.',
+          imageAlt: 'Sala de masaje en Recovery Point',
+          ctaLabel: 'Ver masajes',
+        },
+        fisio: {
+          eyebrow: 'Diagnóstico y tratamiento',
+          title: 'Fisioterapia con <em>cédula</em>.',
+          copy: 'Consulta inicial de 30 min para evaluar la lesión. Sesiones de 60 min con técnicas manuales, ejercicio terapéutico y rehabilitación funcional. Plan a tu medida, no recetas genéricas.',
+          imageAlt: 'Sala de fisioterapia en Recovery Point',
+          ctaLabel: 'Ver fisioterapia',
+        },
+      },
       hero: {
         eyebrow: 'Recovery Point · Mexicali',
         title: 'Tu lugar para <em>recuperarte</em>, hidratarte y vivir mejor.',
-        subtitle: 'Sueros intravenosos, terapias de recuperación y medicina regenerativa con médicos certificados. Sala privada o compartida, sin agujas dolorosas, en menos de una hora.',
+        subtitle: 'Sal más ligero, con más energía y enfocado. Sueros, NAD+, frío, calor y masaje en una sola visita, aplicados por personal con cédula. Menos de una hora.',
         primaryCta: 'Reservar por WhatsApp',
         secondaryCta: 'Conocer terapias',
-        accreditation: 'Médicos certificados · Vitaminas grado farmacéutico · Más de 12,000 sesiones',
+        accreditation: 'Equipo certificado · Vitaminas grado farmacéutico · Más de 5,000 sesiones',
       },
       pillars: {
         eyebrow: 'Tres pilares',
@@ -77,17 +135,17 @@ export const messages: Record<Locale, Messages> = {
         eyebrow: 'Lo que respalda Recovery Point',
         title: 'Datos, no promesas.',
         items: [
-          { value: 12000, suffix: '+', label: 'Sesiones realizadas' },
-          { value: 4.9,   suffix: '★', label: 'Promedio Google · más de 200 reseñas' },
-          { value: 28,    suffix: '',  label: 'Sueros distintos en catálogo activo' },
-          { value: 6,     suffix: ' años', label: 'Operando en Mexicali' },
+          { value: 2000, suffix: '+', label: 'Sesiones realizadas' },
+          { value: 5.0,   suffix: '★', label: 'Promedio Google · 36 reseñas' },
+          { value: 28,    suffix: '',  label: 'Sueros en el menú' },
+          { value: 2,    suffix: ' años', label: 'En Mexicali desde 2024' },
         ],
       },
       why: {
         eyebrow: 'Por qué Recovery Point',
         title: 'No somos una clínica más.',
         items: [
-          { title: 'Médicos certificados', description: 'Cada protocolo y aplicación supervisado por médico con cédula. Cero pinche aficionado con aguja.' },
+          { title: 'Equipo certificado', description: 'Cada protocolo aplicado por personal con cédula — médico, enfermería o especialista del área que corresponde. No improvisamos.' },
           { title: 'Vitaminas grado farmacéutico', description: 'Trabajamos con compounders certificados. Conoces exactamente qué entra a tu vena.' },
           { title: 'Sala VIP privada o sala social', description: 'Tú decides: privacidad total para llamadas y descanso, o conviviendo con tu pareja, amigo o equipo.' },
           { title: 'Botas de compresión incluidas', description: 'Cada sesión de IV incluye Compression Boots sin costo extra. Sales más ligero de lo que entraste.' },
@@ -98,6 +156,17 @@ export const messages: Record<Locale, Messages> = {
         eyebrow: 'Lo que dicen quienes ya vinieron',
         title: 'Reseñas reales de Google.',
         viewAll: 'Ver todas en Google',
+        // Real Google reviews scraped from maps.google.com/?q=Recovery+Point+Mexicali
+        // 2026-05-23. All Spanish (original language). Kept verbatim except minor
+        // typo cleanups. Linked to Google Maps for verification.
+        items: [
+          { author: 'Karla Amezcua',  date: 'Hace 1 año',  text: 'Probé el sauna infrarrojo, una sesión con el fisioterapeuta y un suero intravenoso con las botas de compresión. Las instalaciones están impecables y muy bien equipadas. Además, todo el personal fue súper amable y atento en todo momento. Súper recomendado.' },
+          { author: 'Deicy López',    date: 'Hace 1 año',  text: 'Es un lugar que llegas y percibes que es muy limpio, un ambiente muy relajado y cómodo, con equipo nuevo y cuidan cada detalle. La atención súper servicial y cómoda. Acudí a la colocación de un suero y con ganas de regresar a probar algún otro servicio.' },
+          { author: 'Paulina De La Vega Lozano', date: 'Hace 1 año', text: 'Quedé realmente impresionada con la calidad de sus servicios, instalaciones y atención. Desde el momento en que llegué, el personal fue muy amable y profesional.' },
+          { author: 'Jesús Guerrero', date: 'Hace 7 meses', text: 'Muy buen fisioterapeuta, preparado, te explica todo perfectamente y se prepara para las sesiones. Recomendadísimo.' },
+          { author: 'Marisol González', date: 'Hace 11 meses', text: '¡Excelente! Desde que entras al lugar se siente una paz, y te súper cuidan. Lo recomiendo.' },
+          { author: 'Evelin López',   date: 'Hace 6 meses', text: 'Les recomiendo este lugar a todos. Es el mejor. Gracias a Paloma y Hilda, súper atentas. Nos ayudaron mucho, recomendaron y explicaron todos los servicios.' },
+        ],
       },
       cta: {
         title: 'Listo para sentirte mejor mañana mismo.',
@@ -123,7 +192,7 @@ export const messages: Record<Locale, Messages> = {
         iv: {
           name: 'IV Therapy',
           short: 'IV',
-          tagline: 'Sueros intravenosos con vitaminas, antioxidantes y NAD+. 28 fórmulas activas.',
+          tagline: 'Sueros intravenosos con vitaminas, antioxidantes y NAD+. 28 fórmulas en el menú.',
           chip: 'energía · cruda · belleza · NAD',
         },
         massage: {
@@ -180,7 +249,7 @@ export const messages: Record<Locale, Messages> = {
       hero: {
         eyebrow: 'IV Therapy',
         title: 'Sueros intravenosos a la medida de lo que tu cuerpo necesita.',
-        subtitle: 'Nuestro menú activo tiene 28 fórmulas: hidratación, energía, NAD+, belleza, detox, recuperación deportiva y combos premium. Aplicados por médico, en sala normal o privada, con botas de compresión incluidas.',
+        subtitle: 'Nuestro menú tiene 28 fórmulas: hidratación, energía, NAD+, belleza, detox, recuperación deportiva y combos premium. Aplicados por médico, en sala normal o privada, con botas de compresión incluidas.',
         cta: 'Reservar mi IV por WhatsApp',
       },
       familyFilter: {
@@ -239,7 +308,7 @@ export const messages: Record<Locale, Messages> = {
       hero: {
         eyebrow: 'Nosotros',
         title: 'El equipo detrás de Recovery Point.',
-        subtitle: 'Médicos certificados, fisioterapeutas con cédula, recepción que conoce tu nombre.',
+        subtitle: 'Médicos, enfermería certificada y especialistas con cédula por cada área. Recepción que conoce tu nombre.',
       },
       roles: {
         founder: 'Fundador & Director',
@@ -389,13 +458,71 @@ export const messages: Record<Locale, Messages> = {
       contact: 'Contact',
     },
     home: {
+      chapters: {
+        iv: {
+          eyebrow: 'Medical protocol',
+          title: 'Intravenous <em>IV therapy</em>.',
+          copy: 'Hydration, energy and cellular vitality in 45 minutes. 28 formulas on the menu, private or shared room, certified nursing and area specialists, plus compression boots included throughout your session.',
+          imageAlt: 'IV social room at Recovery Point Mexicali',
+          ctaLabel: 'See IV menu',
+        },
+        nad: {
+          eyebrow: 'Longevity',
+          title: 'NAD+ Premium <em>at cellular level</em>.',
+          copy: 'Pure NAD+, NAD+ with MVI, or NAD+ with Glutathione. Real mitochondrial regeneration via the only intravenous route with clinical bioavailability. Sessions of 120 to 150 minutes.',
+          imageAlt: 'Premium NAD+ session at Recovery Point',
+          ctaLabel: 'Learn about NAD+',
+        },
+        cryo: {
+          eyebrow: 'Extreme cold',
+          title: 'Full-body <em>cryotherapy</em>.',
+          copy: 'Three minutes at -110°C in a nitrogen-gas chamber. A systemic response that drops inflammation, raises endorphins, and leaves your body electric — ready to train or work.',
+          imageAlt: 'Cryotherapy chamber at Recovery Point',
+          ctaLabel: 'See cryotherapy',
+        },
+        ice: {
+          eyebrow: 'Guided immersion',
+          title: 'Ice <em>plunge</em>.',
+          copy: 'Ten to fifteen minutes at 5°C, with breathing guidance. Not just physical recovery — the ice plunge trains mental resilience to acute stress.',
+          imageAlt: 'Recovery Point ice plunge in the courtyard',
+          ctaLabel: 'See ice plunge',
+        },
+        sauna: {
+          eyebrow: 'Deep heat',
+          title: 'Cedar <em>infrared</em> sauna.',
+          copy: 'Real cedar, far-infrared, 30 minutes of deep sweat. The difference vs. traditional sauna: heat penetrates directly into your tissues — it doesn\'t just heat the air.',
+          imageAlt: 'Cedar infrared sauna at Recovery Point',
+          ctaLabel: 'See sauna',
+        },
+        redlight: {
+          eyebrow: 'Light that repairs',
+          title: 'Red Light <em>Bed</em>.',
+          copy: 'Full-body photobiomodulation bed. Wavelengths at 660 + 850 nm for skin, sleep, and cellular recovery. Twenty effortless minutes, cumulative effects with weekly use.',
+          imageAlt: 'Red Light bed at Recovery Point',
+          ctaLabel: 'See Red Light',
+        },
+        massage: {
+          eyebrow: 'Specialized hands',
+          title: 'Five <em>massages</em>.',
+          copy: 'Relaxing, therapeutic, deep tissue, foot reflexology, and lymphatic drainage. Each with its own technique, duration, and price. Applied by therapists with credentials and specific training.',
+          imageAlt: 'Massage room at Recovery Point',
+          ctaLabel: 'See massages',
+        },
+        fisio: {
+          eyebrow: 'Diagnosis & treatment',
+          title: 'Licensed <em>physical therapy</em>.',
+          copy: 'Initial 30-minute consult to assess the injury. Sixty-minute sessions with manual techniques, therapeutic exercise, and functional rehab. A plan tailored to you — not a generic prescription.',
+          imageAlt: 'Physical therapy room at Recovery Point',
+          ctaLabel: 'See physical therapy',
+        },
+      },
       hero: {
         eyebrow: 'Recovery Point · Mexicali',
         title: 'Your place to <em>recover</em>, hydrate and feel better.',
-        subtitle: 'IV therapy, recovery treatments and regenerative medicine with certified physicians. Private or shared room, no painful needles, in under an hour.',
+        subtitle: 'Leave lighter, sharper and with more energy. IV therapy, NAD+, cold, heat and massage in a single visit, applied by licensed staff. Under an hour.',
         primaryCta: 'Book on WhatsApp',
         secondaryCta: 'Browse therapies',
-        accreditation: 'Certified physicians · Pharmaceutical-grade vitamins · 12,000+ sessions delivered',
+        accreditation: 'Certified team · Pharmaceutical-grade vitamins · 5,000+ sessions delivered',
       },
       pillars: {
         eyebrow: 'Three pillars',
@@ -420,17 +547,17 @@ export const messages: Record<Locale, Messages> = {
         eyebrow: 'What backs Recovery Point',
         title: 'Numbers, not promises.',
         items: [
-          { value: 12000, suffix: '+', label: 'Sessions delivered' },
-          { value: 4.9,   suffix: '★', label: 'Average on Google · 200+ reviews' },
-          { value: 28,    suffix: '',  label: 'Active IV formulations on the menu' },
-          { value: 6,     suffix: ' years', label: 'Operating in Mexicali' },
+          { value: 2000, suffix: '+', label: 'Sessions delivered' },
+          { value: 5.0,   suffix: '★', label: 'Average on Google · 36 reviews' },
+          { value: 28,    suffix: '',  label: 'IV formulations on the menu' },
+          { value: 2,    suffix: ' yrs', label: 'In Mexicali since 2024' },
         ],
       },
       why: {
         eyebrow: 'Why Recovery Point',
         title: 'We are not just another clinic.',
         items: [
-          { title: 'Certified physicians', description: 'Every protocol and infusion supervised by a licensed doctor. No amateurs with needles.' },
+          { title: 'Certified team', description: 'Every protocol applied by licensed personnel — physician, nurse, or the specialist for that area. No improvisation, no amateurs with needles.' },
           { title: 'Pharmaceutical-grade vitamins', description: 'Sourced from certified compounders. You know exactly what enters your vein.' },
           { title: 'Private VIP room or social lounge', description: 'You choose: total privacy for calls and rest, or in the lounge with partner, friend or team.' },
           { title: 'Compression boots included', description: 'Every IV session includes 30 min of compression boots at no extra cost. You leave lighter than you came.' },
@@ -441,6 +568,15 @@ export const messages: Record<Locale, Messages> = {
         eyebrow: 'What our clients say',
         title: 'Real reviews from Google.',
         viewAll: 'See all on Google',
+        // Quotes kept in original Spanish — translating would dilute the authenticity.
+        items: [
+          { author: 'Karla Amezcua',  date: '1 year ago',   text: 'Probé el sauna infrarrojo, una sesión con el fisioterapeuta y un suero intravenoso con las botas de compresión. Las instalaciones están impecables y muy bien equipadas. Además, todo el personal fue súper amable y atento en todo momento. Súper recomendado.' },
+          { author: 'Deicy López',    date: '1 year ago',   text: 'Es un lugar que llegas y percibes que es muy limpio, un ambiente muy relajado y cómodo, con equipo nuevo y cuidan cada detalle. La atención súper servicial y cómoda.' },
+          { author: 'Paulina De La Vega Lozano', date: '1 year ago', text: 'Quedé realmente impresionada con la calidad de sus servicios, instalaciones y atención. Desde el momento en que llegué, el personal fue muy amable y profesional.' },
+          { author: 'Jesús Guerrero', date: '7 months ago', text: 'Muy buen fisioterapeuta, preparado, te explica todo perfectamente y se prepara para las sesiones. Recomendadísimo.' },
+          { author: 'Marisol González', date: '11 months ago', text: '¡Excelente! Desde que entras al lugar se siente una paz, y te súper cuidan. Lo recomiendo.' },
+          { author: 'Evelin López',   date: '6 months ago', text: 'Les recomiendo este lugar a todos. Es el mejor. Gracias a Paloma y Hilda, súper atentas. Nos ayudaron mucho.' },
+        ],
       },
       cta: {
         title: 'Ready to feel better as soon as tomorrow.',
@@ -463,7 +599,7 @@ export const messages: Record<Locale, Messages> = {
         objective: 'What are you looking for?',
       },
       items: {
-        iv: { name: 'IV Therapy', short: 'IV', tagline: 'Intravenous drips with vitamins, antioxidants and NAD+. 28 active formulations.', chip: 'energy · hangover · beauty · NAD' },
+        iv: { name: 'IV Therapy', short: 'IV', tagline: 'Intravenous drips with vitamins, antioxidants and NAD+. 28 formulations on the menu.', chip: 'energy · hangover · beauty · NAD' },
         massage: { name: 'Massage Therapy', short: 'Massage', tagline: 'Relaxing, therapeutic, deep-tissue, foot reflexology and lymphatic drainage.', chip: 'pain · tension · lymph' },
         sauna: { name: 'Infrared Sauna', short: 'Sauna', tagline: 'Cedar infrared heat for deep detox, cardiovascular recovery and sleep.', chip: 'detox · sleep · cardio' },
         cryo: { name: 'Cryotherapy', short: 'Cryo', tagline: 'Full-body chamber at -110°C for 3 minutes. Inflammation, energy, recovery.', chip: 'inflammation · energy' },
@@ -531,7 +667,7 @@ export const messages: Record<Locale, Messages> = {
       ],
     },
     team: {
-      hero: { eyebrow: 'About us', title: 'The team behind Recovery Point.', subtitle: 'Certified physicians, licensed physiotherapists, a front desk that knows your name.' },
+      hero: { eyebrow: 'About us', title: 'The team behind Recovery Point.', subtitle: 'Physicians, certified nursing, and licensed specialists for each area. A front desk that knows your name.' },
       roles: { founder: 'Founder & Director', medicalDirector: 'Medical Director', physiotherapist: 'Physical Therapist', nurse: 'Nursing', reception: 'Front Desk' },
     },
     space: {

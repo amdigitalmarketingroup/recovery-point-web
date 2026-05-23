@@ -1,0 +1,228 @@
+---
+/**
+ * /en/servicios/iv — IV Therapy detail page (EN).
+ * Mirrors /servicios/iv.astro structure with all body strings switched by locale.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import HeroBackground from '@/components/HeroBackground.astro'
+import { SueroCatalog } from '@/components/SueroCatalog'
+import { t, getLocaleFromPath } from '@/i18n/messages'
+import { telLink, whatsappLink } from '@/lib/contact'
+
+const locale = getLocaleFromPath(Astro.url.pathname)
+const wa = whatsappLink('iv-generic')
+
+const stepsEs = [
+  { title: 'Llegas', description: 'Te recibimos en recepción, te ofrecemos agua y te llevamos a tu sala.' },
+  { title: 'Médico evalúa', description: 'Conversamos: cómo te sientes, qué medicación tomas. Diseñamos la fórmula correcta.' },
+  { title: 'Te aplicamos', description: 'Inserción guiada con técnica que minimiza dolor. Botas de compresión durante todo el suero.' },
+  { title: 'Sales mejor', description: '45 a 60 min después estás listo para seguir tu día. Te escribimos al día siguiente.' },
+]
+const stepsEn = [
+  { title: 'You arrive', description: 'We welcome you at reception, offer water, and walk you to your room.' },
+  { title: 'Physician evaluates', description: 'We talk: how you feel, what medication you take. We design the right formula.' },
+  { title: 'We apply it', description: 'Guided insertion with a technique that minimizes pain. Compression boots throughout the IV.' },
+  { title: 'You leave better', description: '45 to 60 min later you are ready to continue your day. We message you the next day.' },
+]
+const steps = locale === 'en' ? stepsEn : stepsEs
+
+const faqEs = [
+  { q: '¿Tengo que hacer cita o llego directo?', a: 'Recomendamos agendar por WhatsApp para garantizar tu sala y horario. Si llegas directo y hay espacio, te atendemos también.' },
+  { q: '¿Es doloroso?', a: 'La inserción es momentánea y la realiza personal con cédula. Usamos catéteres delgados; la mayoría reporta solo un pellizco al inicio.' },
+  { q: '¿Cuál suero me conviene?', a: 'Depende de tu objetivo. En la pestaña abajo filtra por familia (NAD / Premium / Estándar) y revisa los efectos. Si dudas, escríbenos por WhatsApp y Ale te recomienda.' },
+  { q: '¿Puedo combinar con sauna o cryo?', a: 'Sí. Muchos clientes hacen IV + sauna o IV + cryo en la misma visita. Coméntalo al reservar para encadenar el horario.' },
+  { q: '¿Está cubierto por seguro?', a: 'Por ahora no manejamos convenios con aseguradoras directos. Te entregamos comprobante fiscal si lo necesitas para reembolso o gasto deducible.' },
+]
+const faqEn = [
+  { q: 'Do I need an appointment or can I walk in?', a: 'We recommend booking via WhatsApp to guarantee your room and time. If you walk in and we have space, we also take you.' },
+  { q: 'Does it hurt?', a: 'Insertion is brief and done by licensed staff. We use thin catheters; most report only a small pinch at the start.' },
+  { q: 'Which IV is right for me?', a: 'Depends on your goal. Filter by family below (NAD / Premium / Standard) and review the effects. If unsure, WhatsApp us and Ale recommends one.' },
+  { q: 'Can I combine with sauna or cryo?', a: 'Yes. Many clients do IV + sauna or IV + cryo in the same visit. Mention it when booking so we chain the timing.' },
+  { q: 'Is it covered by insurance?', a: 'We do not currently have direct insurer agreements. We provide tax receipts if you need them for reimbursement or deductible expense.' },
+]
+const faq = locale === 'en' ? faqEn : faqEs
+---
+
+<BaseLayout
+  title={locale === 'en' ? 'IV Therapy' : 'IV Therapy'}
+  description={t(locale, 'iv.hero.subtitle')}
+>
+  {/* HERO */}
+  <section class="relative isolate overflow-hidden">
+    <HeroBackground />
+    <div class="container-rp pt-12 pb-12 sm:pt-20 sm:pb-16">
+      <p class="eyebrow" data-reveal>{t(locale, 'iv.hero.eyebrow')}</p>
+      <h1
+        class="mt-4 text-[44px] sm:text-[60px] lg:text-[76px] font-display font-semibold leading-[1.04] tracking-tight text-balance max-w-4xl"
+        data-reveal
+        set:html={t(locale, 'iv.hero.title')}
+      />
+      <p
+        class="mt-6 max-w-2xl text-[17px] sm:text-[19px] text-ink-700 leading-relaxed text-pretty"
+        data-reveal
+      >
+        {t(locale, 'iv.hero.subtitle')}
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row gap-3" data-reveal>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 h-14 px-7 rounded-full bg-cobalt-700 text-white text-[16px] font-semibold hover:bg-cobalt-800 hover:shadow-lg hover:shadow-cobalt-800/25 transition-all duration-[var(--duration-micro)] [transition-timing-function:var(--ease-out-quart)] active:scale-[0.98]"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+          {t(locale, 'iv.hero.cta')}
+        </a>
+        <a
+          href="#sueros"
+          class="inline-flex items-center justify-center gap-2 h-14 px-7 rounded-full bg-white text-cobalt-800 border border-cobalt-200 text-[16px] font-semibold hover:border-cobalt-400 hover:bg-cobalt-50 transition-all duration-[var(--duration-micro)] [transition-timing-function:var(--ease-out-quart)] active:scale-[0.98]"
+        >
+          {locale === 'en' ? 'See IV menu' : 'Ver menú de sueros'}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* HOW IT WORKS */}
+  <section class="container-rp section-y">
+    <div class="mb-10">
+      <p class="eyebrow" data-reveal>{locale === 'en' ? 'How it works' : 'Cómo funciona'}</p>
+      <h2 class="mt-3 text-[32px] sm:text-[40px] font-display font-semibold leading-tight text-balance" data-reveal set:html={locale === 'en' ? 'Four steps, one hour <em>total</em>.' : 'Cuatro pasos, una hora <em>en total</em>.'} />
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {steps.map((step, i) => (
+        <div
+          data-reveal
+          style={`transition-delay: ${i * 80}ms`}
+          class="relative p-6 rounded-2xl bg-white border border-cobalt-100/60 hover:border-cobalt-300 hover:-translate-y-1 transition-all duration-[var(--duration-reveal)] [transition-timing-function:var(--ease-out-quart)]"
+        >
+          <span class="absolute -top-3 -left-1 font-display text-[64px] font-semibold leading-none text-cobalt-100">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <div class="relative pt-8">
+            <h3 class="font-display text-[20px] font-semibold leading-tight">{step.title}</h3>
+            <p class="mt-2 text-[14px] text-ink-700 leading-relaxed">{step.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {/* SUEROS CATALOG */}
+  <section id="sueros" class="container-rp section-y bg-ivory-50">
+    <div class="mb-10 max-w-3xl">
+      <p class="eyebrow" data-reveal>{locale === 'en' ? 'Active menu' : 'Menú activo'}</p>
+      <h2 class="mt-3 text-[32px] sm:text-[40px] font-display font-semibold leading-tight text-balance" data-reveal set:html={locale === 'en' ? '15 formulas, <em>one for you</em>.' : '15 fórmulas, <em>una para ti</em>.'} />
+      <p class="mt-4 text-ink-700 leading-relaxed text-pretty" data-reveal>
+        {locale === 'en'
+          ? 'Filter by family to see duration, ingredients, and price. When you choose, we take you to WhatsApp with your IV pre-selected.'
+          : 'Filtra por familia para ver duración, ingredientes y precio. Cuando elijas, te llevamos a WhatsApp con tu suero ya pre-seleccionado.'}
+      </p>
+    </div>
+    <SueroCatalog client:visible locale={locale} />
+  </section>
+
+  {/* NORMAL vs VIP */}
+  <section class="container-rp section-y">
+    <div class="mb-10 max-w-3xl">
+      <p class="eyebrow" data-reveal>{locale === 'en' ? 'Shared room vs VIP room' : 'Sala normal vs Sala VIP'}</p>
+      <h2 class="mt-3 text-[32px] sm:text-[40px] font-display font-semibold leading-tight text-balance" data-reveal set:html={locale === 'en' ? 'You choose <em>how</em> you rest.' : 'Tú eliges <em>cómo</em> descansas.'} />
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div data-reveal class="p-7 sm:p-8 rounded-3xl bg-cobalt-50 ring-1 ring-cobalt-100">
+        <p class="eyebrow text-cobalt-700">{locale === 'en' ? 'Shared IV room' : 'Sala IV · Compartida'}</p>
+        <h3 class="mt-3 font-display text-[28px] font-semibold leading-tight">{locale === 'en' ? 'Up to 4 people' : 'Hasta 4 personas'}</h3>
+        <ul class="mt-5 space-y-2.5 text-[15px] text-ink-700 leading-relaxed">
+          {(locale === 'en'
+            ? ['Individual recliner chairs','Ideal to come with a friend, partner, team','Curated ambient music','Compression boots included']
+            : ['Sillones reclinables individuales','Ideal para venir con amigo, pareja, equipo','Música ambiente curada','Botas de compresión incluidas']
+          ).map((item) => (
+            <li class="flex items-start gap-2"><span class="text-cobalt-700 mt-1">✓</span> {item}</li>
+          ))}
+        </ul>
+        <p class="mt-6 text-[13px] text-ink-500">
+          {locale === 'en'
+            ? 'Same price as the private room. The room does not change the cost.'
+            : 'Mismo precio que la sala privada. La sala no cambia el costo.'}
+        </p>
+      </div>
+
+      <div data-reveal style="transition-delay: 80ms" class="p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-cobalt-800 to-cobalt-900 text-white ring-1 ring-cobalt-700">
+        <p class="eyebrow text-periwinkle-400">{locale === 'en' ? 'Private VIP IV room' : 'Sala IV · VIP Privada'}</p>
+        <h3 class="mt-3 font-display text-[28px] font-semibold leading-tight">{locale === 'en' ? 'Up to 2 people' : 'Hasta 2 personas'}</h3>
+        <ul class="mt-5 space-y-2.5 text-[15px] leading-relaxed [color:rgba(255,255,255,0.85)]">
+          {(locale === 'en'
+            ? ['Total privacy for calls, work, rest','Ideal for couples or quiet sessions','Adjustable ambient lighting','Compression boots included']
+            : ['Privacidad total para llamadas, trabajo, descanso','Ideal para parejas o sesiones tranquilas','Iluminación ambient regulable','Botas de compresión incluidas']
+          ).map((item) => (
+            <li class="flex items-start gap-2"><span class="text-periwinkle-400 mt-1">✓</span> {item}</li>
+          ))}
+        </ul>
+        <p class="mt-6 text-[13px] [color:rgba(255,255,255,0.6)]">
+          {locale === 'en'
+            ? 'Book in advance. The VIP room fills up fast.'
+            : 'Reserva con anticipación. La VIP suele llenarse rápido.'}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* FAQ */}
+  <section class="container-rp section-y">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-4 lg:sticky lg:top-28 self-start">
+        <p class="eyebrow" data-reveal>{locale === 'en' ? 'Frequently asked' : 'Preguntas frecuentes'}</p>
+        <h2 class="mt-3 text-[32px] sm:text-[40px] font-display font-semibold leading-tight text-balance" data-reveal set:html={locale === 'en' ? 'What clients ask us most about <em>IV</em>.' : 'Lo que más nos preguntan sobre <em>IV</em>.'} />
+      </div>
+      <div class="lg:col-span-8">
+        {faq.map((item, i) => (
+          <details
+            data-reveal
+            style={`transition-delay: ${i * 60}ms`}
+            class="group border-t border-cobalt-100 py-5 [&_summary::-webkit-details-marker]:hidden"
+          >
+            <summary class="flex items-center justify-between gap-4 cursor-pointer list-none">
+              <h3 class="font-display text-[19px] sm:text-[20px] font-semibold leading-snug text-ink-900 group-hover:text-cobalt-800 transition-colors">{item.q}</h3>
+              <span class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full bg-cobalt-50 text-cobalt-700 transition-transform duration-[var(--duration-micro)] group-open:rotate-45">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+              </span>
+            </summary>
+            <p class="mt-4 text-[15px] text-ink-700 leading-relaxed text-pretty">{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* FINAL CTA */}
+  <section class="container-rp section-y">
+    <div class="rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-cobalt-50 via-ivory-50 to-cobalt-50/40 text-center">
+      <h2 class="text-[32px] sm:text-[44px] font-display font-semibold leading-tight text-balance max-w-2xl mx-auto" data-reveal>
+        {locale === 'en'
+          ? 'Your next IV is one message away.'
+          : 'Tu próximo IV está a un mensaje de distancia.'}
+      </h2>
+      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center" data-reveal>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-cobalt-700 text-white text-[16px] font-semibold hover:bg-cobalt-800 hover:shadow-lg hover:shadow-cobalt-800/30 transition-all duration-[var(--duration-micro)] [transition-timing-function:var(--ease-out-quart)]"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+          {t(locale, 'iv.hero.cta')}
+        </a>
+        <a
+          href={telLink}
+          class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-white text-cobalt-800 border border-cobalt-200 text-[16px] font-semibold hover:border-cobalt-400 hover:bg-cobalt-50 transition-all duration-[var(--duration-micro)] [transition-timing-function:var(--ease-out-quart)]"
+        >
+          {t(locale, 'site.callCta')}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-05-23T06:41:38.328Z",
+  "source": "supabase",
+  "hours": [
+    {
+      "day_of_week": 0,
+      "label_es": "Lunes",
+      "label_en": "Monday",
+      "is_open": true,
+      "opens": "07:00:00",
+      "closes": "21:00:00",
+      "updated_at": "2026-05-23T03:42:58.543768+00:00"
+    },
+    {
+      "day_of_week": 1,
+      "label_es": "Martes",
+      "label_en": "Tuesday",
+      "is_open": true,
+      "opens": "07:00:00",
+      "closes": "21:00:00",
+      "updated_at": "2026-05-23T03:42:58.543768+00:00"
+    },
+    {
+      "day_of_week": 2,
+      "label_es": "Miércoles",
+      "label_en": "Wednesday",
+      "is_open": true,
+      "opens": "07:00:00",
+      "closes": "21:00:00",
+      "updated_at": "2026-05-23T03:42:58.543768+00:00"
+    },
+    {
+      "day_of_week": 3,
+      "label_es": "Jueves",
+      "label_en": "Thursday",
+      "is_open": true,
+      "opens": "07:00:00",
+      "closes": "21:00:00",
+      "updated_at": "2026-05-23T03:42:58.543768+00:00"
+    },
+    {
+      "day_of_week": 4,
+      "label_es": "Viernes",
+      "label_en": "Friday",
+      "is_open": true,
+      "opens": "07:00:00",
+      "closes": "21:00:00",
+      "updated_at": "2026-05-23T03:42:58.543768+00:00"
+    },
+    {
+      "day_of_week": 5,
+      "label_es": "Sábado",
+      "label_en": "Saturday",
+      "is_open": true,
+      "opens": "07:00:00",
+      "closes": "16:00:00",
+      "updated_at": "2026-05-23T03:42:58.543768+00:00"
+    },
+    {
+      "day_of_week": 6,
+      "label_es": "Domingo",
+      "label_en": "Sunday",
+      "is_open": true,
+      "opens": "07:00:00",
+      "closes": "16:00:00",
+      "updated_at": "2026-05-23T03:42:58.543768+00:00"
+    }
+  ]
+}

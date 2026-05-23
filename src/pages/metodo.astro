@@ -1,0 +1,104 @@
+---
+/**
+ * /metodo — El Método Recovery Point
+ *
+ * Proprietary positioning: takes commodity wellness service category and
+ * reframes it as a 4-step protocol with RP branding. Sticky-scroll narrative
+ * with numbered milestones and editorial photography.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { t, getLocaleFromPath, getLocaleFromPath } from '@/i18n/messages'
+import { telLink, whatsappLink } from '@/lib/contact'
+
+const locale = getLocaleFromPath(Astro.url.pathname)
+const wa = whatsappLink('generic')
+const steps = t(locale, 'method.steps') as Array<{ title: string; description: string }>
+
+// Mario's reordering 2026-05-23:
+//   01 → new consultation photo (therapist + patient + laptop)
+//   02 → former 04 (red-room IV session)
+//   03 → former 01 (doctor's gloves close-up)
+//   04 → new exam/handshake photo (therapist evaluating patient's wrist)
+const stepImages = [
+  '/img/method/step01.webp?v=22',
+  '/img/services/iv-room.webp?v=22',
+  '/img/services/iv-alt.webp?v=22',
+  '/img/method/step04.webp?v=22',
+]
+---
+
+<BaseLayout
+  title="El Método Recovery Point"
+  description="Cuatro pasos para que tu sesión sea protocolo, no improvisación."
+>
+  {/* ───── HERO ───── */}
+  <section class="relative isolate overflow-hidden bg-ivory-50">
+    <div aria-hidden class="absolute inset-0 -z-10 bg-dot-grid mask-fade-y opacity-[0.18]"></div>
+    <div aria-hidden class="absolute -top-32 right-0 -z-10 size-[480px] rounded-full bg-cobalt-200/40 blur-[120px]"></div>
+
+    <div class="container-rp pt-24 pb-12 sm:pt-32 sm:pb-16">
+      <p class="eyebrow" data-reveal>{t(locale, 'method.hero.eyebrow')}</p>
+      <h1
+        class="mt-5 text-[44px] sm:text-[68px] lg:text-[88px] font-display font-semibold leading-[0.98] tracking-tight text-balance max-w-5xl"
+        data-reveal
+      >
+        Cuatro pasos para que tu sesión sea <em>protocolo</em>, no improvisación.
+      </h1>
+      <p class="mt-7 max-w-2xl text-[17px] sm:text-[20px] text-ink-700 leading-relaxed text-pretty" data-reveal>
+        Cada sesión en Recovery Point sigue un protocolo médico de cuatro pasos. Sin improvisación, sin recetas genéricas, sin recortes. Esto es lo que pagas cuando vienes con nosotros.
+      </p>
+    </div>
+  </section>
+
+  {/* ───── 4 STEPS — editorial alternating layout (Reina pattern) ───── */}
+  {steps.map((step, i) => (
+    <section class={`section-y ${i % 2 === 1 ? 'bg-ivory-100' : ''}`}>
+      <div class="container-rp grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div class={`lg:col-span-6 ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+          <p class="eyebrow text-cobalt-700" data-reveal>Paso {String(i + 1).padStart(2, '0')}</p>
+          <h2
+            class="mt-3 font-display text-[44px] sm:text-[64px] lg:text-[76px] font-semibold leading-[1.02] tracking-tight text-balance"
+            data-reveal
+          >
+            {step.title}
+          </h2>
+          <p class="mt-6 text-[17px] sm:text-[19px] text-ink-700 leading-relaxed text-pretty max-w-xl" data-reveal>
+            {step.description}
+          </p>
+        </div>
+        <div class={`lg:col-span-6 ${i % 2 === 1 ? 'lg:order-1' : ''}`} data-reveal style={`transition-delay: 120ms`}>
+          <div class="aspect-[4/5] rounded-3xl overflow-hidden ring-1 ring-cobalt-100 shadow-[0_30px_80px_-30px_rgba(31,45,90,0.25)]">
+            <picture>
+              <source srcset={stepImages[i]} type="image/webp" />
+              <img src={stepImages[i]} alt={step.title} loading="lazy" class="size-full object-cover" />
+            </picture>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  {/* ───── CTA ───── */}
+  <section data-nav-theme="dark" class="relative isolate overflow-hidden bg-cobalt-900 section-y">
+    <div aria-hidden class="absolute inset-0 bg-dot-grid mask-fade-y opacity-10"></div>
+    <div aria-hidden class="absolute -bottom-40 -right-40 size-[540px] rounded-full bg-cobalt-700/30 blur-[140px]"></div>
+    <div class="container-rp text-center relative">
+      <h2 class="text-[36px] sm:text-[56px] font-display font-semibold leading-[1.04] tracking-tight text-balance max-w-3xl mx-auto text-white" data-reveal>
+        ¿Listo para vivir el <em class="text-periwinkle-400">Método</em>?
+      </h2>
+      <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center" data-reveal>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-cobalt-700 text-white text-[16px] font-semibold hover:bg-cobalt-800 transition-all btn-shimmer"
+        >
+          {t(locale, 'site.whatsappCta')}
+        </a>
+        <a href={telLink} class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-transparent text-white border border-white/30 text-[16px] font-semibold hover:bg-white/10 transition-all">
+          {t(locale, 'site.callCta')}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

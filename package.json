@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev --host",
-    "build": "astro build",
+    "build": "node scripts/fetch-clinic-hours.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },

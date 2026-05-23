@@ -1,0 +1,36 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Quiz from '@/components/Quiz'
+import { t, getLocaleFromPath, getLocaleFromPath } from '@/i18n/messages'
+
+const locale = getLocaleFromPath(Astro.url.pathname)
+---
+
+<BaseLayout
+  title={t(locale, 'nav.reserve')}
+  description={t(locale, 'quiz.hero.subtitle')}
+>
+  <section class="relative isolate overflow-hidden bg-ivory-50">
+    <div aria-hidden class="absolute inset-0 -z-10 bg-dot-grid mask-fade-y opacity-[0.18]"></div>
+    <div aria-hidden class="absolute -top-32 -right-32 -z-10 size-[480px] rounded-full bg-cobalt-200/40 blur-[120px]"></div>
+
+    <div class="container-rp pt-24 pb-12 sm:pt-32 sm:pb-16 text-center">
+      <p class="eyebrow" data-reveal>{t(locale, 'quiz.hero.eyebrow')}</p>
+      <h1
+        class="mt-5 text-[44px] sm:text-[64px] lg:text-[80px] font-display font-semibold leading-[0.98] tracking-tight text-balance max-w-3xl mx-auto"
+        data-reveal
+      >
+        Te ayudamos a <em>elegir</em>.
+      </h1>
+      <p class="mt-7 max-w-xl mx-auto text-[17px] sm:text-[19px] text-ink-700 leading-relaxed text-pretty" data-reveal>
+        {t(locale, 'quiz.hero.subtitle')}
+      </p>
+    </div>
+  </section>
+
+  <section class="container-rp pb-24 sm:pb-32">
+    <div class="bg-white rounded-3xl ring-1 ring-cobalt-100 shadow-[0_30px_80px_-40px_rgba(31,45,90,0.18)] p-6 sm:p-10 lg:p-14">
+      <Quiz client:load locale={locale} />
+    </div>
+  </section>
+</BaseLayout>

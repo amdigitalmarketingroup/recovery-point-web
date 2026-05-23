@@ -18,15 +18,14 @@ const { locale, currentPath } = Astro.props as Props
 
 const wa = whatsappLink('generic')
 
-// Nav items rendered in the order Mario approved. The `ready` flag gates
-// items behind real pages — anything not ready is hidden (no cascarón).
-// As Fases 2–7 land, flip the flag here and the nav grows automatically.
+// All navbar pages now real — flag stays as gating mechanism for future routes
 const navItems = [
   { href: localizedPath(locale, '/servicios'), label: t(locale, 'nav.services'), ready: true  },
-  { href: localizedPath(locale, '/nad'),       label: t(locale, 'nav.nad'),      ready: false },
-  { href: localizedPath(locale, '/metodo'),    label: t(locale, 'nav.method'),   ready: false },
-  { href: localizedPath(locale, '/nosotros'),  label: t(locale, 'nav.team'),     ready: false },
-  { href: localizedPath(locale, '/espacio'),   label: t(locale, 'nav.space'),    ready: false },
+  { href: localizedPath(locale, '/nad'),       label: t(locale, 'nav.nad'),      ready: true  },
+  { href: localizedPath(locale, '/metodo'),    label: t(locale, 'nav.method'),   ready: true  },
+  { href: localizedPath(locale, '/nosotros'),  label: t(locale, 'nav.team'),     ready: true  },
+  { href: localizedPath(locale, '/espacio'),   label: t(locale, 'nav.space'),    ready: true  },
+  { href: localizedPath(locale, '/reservar'),  label: t(locale, 'nav.reserve'),  ready: true  },
   { href: localizedPath(locale, '/contacto'),  label: t(locale, 'nav.contact'),  ready: true  },
 ].filter((item) => item.ready)
 
@@ -42,7 +41,12 @@ function pathInLocale(target: Locale): string {
 }
 ---
 
-<header class="sticky top-0 z-30 bg-ivory-50/85 backdrop-blur-md border-b border-cobalt-100/60 pt-safe">
+<header
+  id="rp-header"
+  data-theme="light"
+  data-scrolled="false"
+  class="sticky top-0 z-30 transition-[background-color,border-color,backdrop-filter,color] duration-[var(--duration-reveal)] [transition-timing-function:var(--ease-out-quart)] pt-safe"
+>
   <div class="container-rp flex items-center justify-between h-16 sm:h-20">
     <Logo />
 
@@ -52,10 +56,10 @@ function pathInLocale(target: Locale): string {
         <a
           href={item.href}
           class:list={[
-            'px-3 py-2 text-[14px] font-medium tracking-tight rounded-full transition-colors duration-[var(--duration-micro)]',
+            'px-3 py-2 text-[14px] font-medium tracking-tight rounded-full transition-colors duration-[var(--duration-micro)] rp-nav-link',
             currentPath === item.href || currentPath.startsWith(item.href + '/')
-              ? 'text-cobalt-800 bg-cobalt-50'
-              : 'text-ink-700 hover:text-cobalt-800 hover:bg-cobalt-50/50'
+              ? 'rp-nav-link-active'
+              : ''
           ]}
         >
           {item.label}
@@ -149,7 +153,7 @@ function pathInLocale(target: Locale): string {
         href={wa}
         target="_blank"
         rel="noopener noreferrer"
-        class="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-mint-500 text-white font-semibold"
+        class="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-cobalt-700 text-white font-semibold"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
         {t(locale, 'site.whatsappCta')}
@@ -171,32 +175,71 @@ function pathInLocale(target: Locale): string {
 
 <script is:inline>
   // Mobile drawer toggle + scroll lock + close-on-nav-click + Esc.
-  // Inline + lightweight — no React island needed for this purely UI logic.
   (function () {
-    const toggle = document.getElementById('rp-menu-toggle')
-    const drawer = document.getElementById('rp-mobile-drawer')
-    const closeBtn = document.getElementById('rp-menu-close')
-    if (!toggle || !drawer) return
-    let open = false
-
+    const toggle = document.getElementById('rp-menu-toggle');
+    const drawer = document.getElementById('rp-mobile-drawer');
+    const closeBtn = document.getElementById('rp-menu-close');
+    if (!toggle || !drawer) return;
+    let open = false;
     function set(state) {
-      open = state
-      drawer.setAttribute('data-open', state ? 'true' : 'false')
-      drawer.setAttribute('aria-hidden', state ? 'false' : 'true')
-      toggle.setAttribute('aria-expanded', state ? 'true' : 'false')
-      document.body.style.overflow = state ? 'hidden' : ''
+      open = state;
+      drawer.setAttribute('data-open', state ? 'true' : 'false');
+      drawer.setAttribute('aria-hidden', state ? 'false' : 'true');
+      toggle.setAttribute('aria-expanded', state ? 'true' : 'false');
+      document.body.style.overflow = state ? 'hidden' : '';
     }
-
-    toggle.addEventListener('click', () => set(!open))
-    closeBtn && closeBtn.addEventListener('click', () => set(false))
-    // Close when clicking any nav anchor inside the drawer
+    toggle.addEventListener('click', () => set(!open));
+    if (closeBtn) closeBtn.addEventListener('click', () => set(false));
     drawer.addEventListener('click', (e) => {
-      const a = e.target.closest('a')
-      if (a) set(false)
-    })
-    // ESC closes
+      const a = e.target.closest && e.target.closest('a');
+      if (a) set(false);
+    });
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && open) set(false)
-    })
-  })()
+      if (e.key === 'Escape' && open) set(false);
+    });
+  }());
+</script>
+
+<script is:inline>
+  // Transparent-over-hero header — solidifies after scroll past 50px.
+  (function () {
+    const header = document.getElementById('rp-header');
+    if (!header) return;
+    function update() {
+      const scrolled = window.scrollY > 50;
+      header.dataset.scrolled = scrolled ? 'true' : 'false';
+    }
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  }());
+</script>
+
+<script is:inline>
+  // Adaptive nav theme — mirrors data-nav-theme of the section under y=80.
+  // Query inside pickTheme each call because some sections (e.g. StatsRow) are
+  // React islands hydrated AFTER this script runs.
+  (function () {
+    const header = document.getElementById('rp-header');
+    if (!header) return;
+    function pickTheme() {
+      const probeY = 80;
+      let current = 'light';
+      const sections = document.querySelectorAll('[data-nav-theme]');
+      for (const s of sections) {
+        const r = s.getBoundingClientRect();
+        if (r.top <= probeY && r.bottom > probeY) {
+          const t = s.getAttribute('data-nav-theme');
+          if (t === 'dark' || t === 'light') current = t;
+          break;
+        }
+      }
+      header.dataset.theme = current;
+    }
+    pickTheme();
+    window.addEventListener('scroll', pickTheme, { passive: true });
+    window.addEventListener('resize', pickTheme, { passive: true });
+    // Re-check after React hydration so islands like StatsRow register their
+    // data-nav-theme. Two checks: one after load, one after a generous beat.
+    window.addEventListener('load', () => { pickTheme(); setTimeout(pickTheme, 600); });
+  }());
 </script>

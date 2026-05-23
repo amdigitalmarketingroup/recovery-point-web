@@ -15,10 +15,11 @@
  * routes to a real page in /src/pages.
  */
 import { getLocaleFromPath, LOCALE_META, LOCALES, localizedPath, t, type Locale } from '@/i18n/messages'
-import { ADDRESS } from '@/lib/contact'
+import { ADDRESS, HOURS_DETAILED } from '@/lib/contact'
 import Header from '@/components/Header.astro'
 import Footer from '@/components/Footer.astro'
 import StickyWhatsApp from '@/components/StickyWhatsApp.astro'
+import Analytics from '@/components/Analytics.astro'
 import '@/styles/global.css'
 
 interface Props {
@@ -31,6 +32,10 @@ interface Props {
   /** Show sticky WA FAB on mobile (true by default; can be disabled on
    *  full-bleed pages where the FAB would compete with a hero CTA) */
   stickyWa?: boolean
+  /** Optional extra JSON-LD graph entries (Service, FAQ, Breadcrumb) emitted
+   *  alongside the base MedicalClinic block. Each entry is stringified
+   *  separately as a sibling <script type="application/ld+json"> tag. */
+  extraJsonLd?: Array<Record<string, unknown>>
 }
 
 const { title, description, locale: localeProp, ogImage = '/og-image.png', stickyWa = true } = Astro.props as Props
@@ -59,8 +64,13 @@ const altPath = basePath()
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#1F2D5A" />
     <meta name="format-detection" content="telephone=no" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Favicons — bust browser cache aggressively since the cobalt+symbol
+         version replaces a much older Elementor default that browsers may
+         have pinned. v3 forces re-fetch even with immutable Cache-Control. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=26" sizes="any" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=26" sizes="16x16 32x32 48x48 64x64" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=26" />
+    <link rel="mask-icon" href="/favicon.svg?v=26" color="#1F2D5A" />
     <link rel="canonical" href={canonicalUrl.toString()} />
 
     {/* hreflang alternates */}
@@ -82,7 +92,7 @@ const altPath = basePath()
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Inter:wght@400;500;600;700;800;900&family=Inter+Tight:wght@500;600;700;800;900&display=swap"
     />
 
     {/* SEO */}
@@ -128,16 +138,39 @@ const altPath = basePath()
         latitude: ADDRESS.lat,
         longitude: ADDRESS.lng,
       },
-      openingHoursSpecification: [
-        { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday'], opens: '07:00', closes: '21:00' },
-        { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Saturday','Sunday'], opens: '07:00', closes: '16:00' },
-      ],
+      // Schema.org dayOfWeek requires English names; map from our 0=Mon..6=Sun.
+      openingHoursSpecification: (() => {
+        const dayMap = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+        // Group by (opens, closes) so we don't emit 7 separate entries when 5
+        // days share the same window.
+        const groups = new Map<string, { dayOfWeek: string[]; opens: string; closes: string }>()
+        for (const h of HOURS_DETAILED) {
+          if (!h.isOpen) continue
+          const key = `${h.opens}__${h.closes}`
+          if (!groups.has(key)) groups.set(key, { dayOfWeek: [], opens: h.opens, closes: h.closes })
+          groups.get(key)!.dayOfWeek.push(dayMap[h.dayOfWeek])
+        }
+        return [...groups.values()].map((g) => ({ '@type': 'OpeningHoursSpecification', ...g }))
+      })(),
       sameAs: [
         'https://instagram.com/recoverypointmx',
         'https://facebook.com/recoverypointmx',
       ],
       priceRange: '$$$',
     })} />
+
+    {/* Optional per-page extra JSON-LD blocks (Service, FAQ, Breadcrumb).
+        Pages pass them via the `extraJsonLd` prop on BaseLayout. Each item
+        is stringified separately so Google parses them as independent
+        graph entries. */}
+    {(Astro.props as Props).extraJsonLd?.map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} />
+    ))}
+
+    {/* Analytics — GA4 + Meta Pixel. Both gated on env vars, so this is a
+        no-op until PUBLIC_GA4_ID / PUBLIC_META_PIXEL_ID are set on the
+        production host. */}
+    <Analytics />
   </head>
   <body>
     {/* Skip-to-content for a11y */}

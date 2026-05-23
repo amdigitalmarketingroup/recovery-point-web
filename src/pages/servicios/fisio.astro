@@ -1,0 +1,6 @@
+---
+import ServiceDetailLayout from '@/components/ServiceDetailLayout.astro'
+import { SERVICE_DETAILS } from '@/lib/service-detail-content'
+const content = SERVICE_DETAILS['fisio']!
+---
+<ServiceDetailLayout content={content} />

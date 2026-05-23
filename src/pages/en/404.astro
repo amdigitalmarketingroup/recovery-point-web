@@ -1,0 +1,56 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { t, getLocaleFromPath, localizedPath } from '@/i18n/messages'
+import { whatsappLink } from '@/lib/contact'
+import { SERVICES } from '@/lib/services-catalog'
+
+const locale = getLocaleFromPath(Astro.url.pathname)
+const popular = SERVICES.slice(0, 6)
+---
+
+<BaseLayout title="404" description={t(locale, 'notFound.subtitle')}>
+  <section class="container-rp section-y text-center">
+    <p class="font-display text-[120px] sm:text-[180px] leading-none text-cobalt-100 font-semibold tracking-tight" data-reveal>404</p>
+    <h1 class="mt-4 text-[36px] sm:text-[48px] font-display font-semibold leading-tight text-balance" data-reveal>
+      {t(locale, 'notFound.title')}
+    </h1>
+    <p class="mt-4 max-w-xl mx-auto text-ink-700 leading-relaxed text-pretty" data-reveal>
+      {t(locale, 'notFound.subtitle')}
+    </p>
+
+    <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center" data-reveal>
+      <a
+        href={localizedPath(locale, '/')}
+        class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-full bg-cobalt-700 text-white font-semibold hover:bg-cobalt-800 transition-colors"
+      >
+        {t(locale, 'notFound.cta')}
+      </a>
+      <a
+        href={whatsappLink('generic')}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-full bg-white text-cobalt-800 border border-cobalt-200 font-semibold hover:border-cobalt-400 hover:bg-cobalt-50 transition-colors"
+      >
+        {t(locale, 'site.whatsappCta')}
+      </a>
+    </div>
+
+    <div class="mt-16 max-w-2xl mx-auto" data-reveal>
+      <p class="eyebrow mb-4">{t(locale, 'notFound.popular')}</p>
+      <ul class="flex flex-wrap justify-center gap-2">
+        {popular.map((svc) => (
+          <li>
+            <a
+              href={whatsappLink('generic')}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center px-3 h-9 rounded-full bg-cobalt-50 text-cobalt-700 hover:bg-cobalt-100 text-[14px] font-medium transition-colors"
+            >
+              {t(locale, `services.items.${svc.i18nKey}.short`)}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

@@ -22,7 +22,7 @@ const variants: Record<Variant, string> = {
   primary:   'bg-cobalt-700 text-white hover:bg-cobalt-800 hover:shadow-lg hover:shadow-cobalt-800/25 active:scale-[0.98]',
   secondary: 'bg-white text-cobalt-800 border border-cobalt-200 hover:border-cobalt-400 hover:bg-cobalt-50 active:scale-[0.98]',
   ghost:     'bg-transparent text-cobalt-800 hover:bg-cobalt-50',
-  whatsapp:  'bg-mint-500 text-white hover:bg-mint-600 hover:shadow-lg hover:shadow-mint-600/25 active:scale-[0.98]',
+  whatsapp:  'bg-cobalt-700 text-white hover:bg-cobalt-800 hover:shadow-lg hover:shadow-cobalt-800/25 active:scale-[0.98]',
 }
 
 const sizes: Record<Size, string> = {

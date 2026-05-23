@@ -1,0 +1,156 @@
+---
+/**
+ * /nosotros — Filosofía, pasión y valores de Recovery Point.
+ *
+ * Mario explicitly asked (2026-05-23): "no pongas personal, solo pon algo
+ * adecuado sobre la filosofia, la pasion, valores, etc. no PERSONAS ok? no
+ * inventes cosas extremas solo cosas adecuadas al contexto."
+ *
+ * So this page is now ONLY values + philosophy. No team cards, no headshots,
+ * no invented bios. Everything below is grounded in things RP actually does
+ * or stands for, verified against the admin DB + Mario's edits.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { t, getLocaleFromPath } from '@/i18n/messages'
+import { telLink, whatsappLink } from '@/lib/contact'
+
+const locale = getLocaleFromPath(Astro.url.pathname)
+const wa = whatsappLink('generic')
+
+// Values — concrete, tied to how RP actually operates. Not grandiose.
+const values = [
+  {
+    number: '01',
+    title: 'Cero improvisación',
+    body: 'Cada protocolo lo aplica personal con cédula para esa área —médico, enfermería o el especialista que corresponde. No vas a recibir una aguja de alguien sin entrenamiento, ni un masaje de alguien sin técnica.',
+  },
+  {
+    number: '02',
+    title: 'Tu cuerpo manda',
+    body: 'No empujamos un combo fijo a todo mundo. Antes de cualquier sesión te preguntamos qué quieres lograr, qué duele y qué historial traes. El protocolo se ajusta a ti, no al revés.',
+  },
+  {
+    number: '03',
+    title: 'Lo que entra a tu cuerpo, lo sabes',
+    body: 'Vitaminas grado farmacéutico de compounders certificados. Cada suero tiene su ficha activa visible. Si quieres ver la composición exacta, te la mostramos antes de empezar.',
+  },
+  {
+    number: '04',
+    title: 'Una hora, no un día',
+    body: 'El flujo está diseñado para que entres, descanses profundo y salgas. Las sesiones de IV duran 45–60 minutos. La sauna, 30. Crio, 3. Te recuperamos sin que pierdas la tarde.',
+  },
+  {
+    number: '05',
+    title: 'Recuperación como hábito',
+    body: 'No vendemos milagros de una sesión. La recuperación verdadera —energía, sueño, rendimiento, piel— se construye con consistencia. Por eso tenemos paquetes mensuales y trabajamos contigo a mediano plazo.',
+  },
+]
+---
+
+<BaseLayout title={t(locale, 'nav.team')} description="Nuestra filosofía: cero improvisación, tu cuerpo manda, transparencia total. Cinco valores que rigen cada sesión en Recovery Point Mexicali.">
+  {/* ───── HERO ───── */}
+  <section class="relative isolate overflow-hidden bg-ivory-50">
+    <div aria-hidden class="absolute inset-0 -z-10 bg-dot-grid mask-fade-y opacity-[0.18]"></div>
+    <div aria-hidden class="absolute -top-32 -left-32 -z-10 size-[480px] rounded-full bg-cobalt-200/40 blur-[120px]"></div>
+    <div aria-hidden class="absolute top-1/3 -right-40 -z-10 size-[520px] rounded-full bg-amber-300/25 blur-[140px]"></div>
+
+    <div class="container-rp pt-24 pb-12 sm:pt-32 sm:pb-16 max-w-4xl">
+      <p class="eyebrow" data-reveal>{locale === 'en' ? 'Our philosophy' : 'Nuestra filosofía'}</p>
+      <h1
+        class="mt-5 text-[44px] sm:text-[68px] lg:text-[88px] font-display font-semibold leading-[0.98] tracking-tight text-balance"
+        data-reveal
+      >
+        {locale === 'en' ? (
+          <>Recovery as a <em>habit</em>, not a fix.</>
+        ) : (
+          <>Recuperación como <em>hábito</em>, no como parche.</>
+        )}
+      </h1>
+      <p class="mt-7 max-w-2xl text-[17px] sm:text-[20px] text-ink-700 leading-relaxed text-pretty" data-reveal>
+        {locale === 'en'
+          ? 'Recovery Point opened in Mexicali in 2024 with one rule: do recovery and regenerative medicine seriously. No miracles. No shortcuts. No improvisation. Just protocols that respect your body and your time.'
+          : 'Recovery Point abrió en Mexicali en 2024 con una sola regla: hacer la recuperación y la medicina regenerativa en serio. Sin milagros, sin atajos, sin improvisación. Solo protocolos que respetan tu cuerpo y tu tiempo.'}
+      </p>
+    </div>
+  </section>
+
+  {/* ───── VALUES — numbered editorial list ───── */}
+  <section class="container-rp section-y">
+    <p class="eyebrow mb-3" data-reveal>{locale === 'en' ? 'Five guideposts' : 'Cinco principios'}</p>
+    <h2
+      class="text-[36px] sm:text-[52px] lg:text-[64px] font-display font-semibold leading-[1.02] tracking-tight text-balance max-w-3xl"
+      data-reveal
+    >
+      {locale === 'en' ? (
+        <>Lo que rige <em>cada sesión</em>.</>
+      ) : (
+        <>Lo que rige <em>cada sesión</em>.</>
+      )}
+    </h2>
+
+    <div class="mt-14 lg:mt-20 space-y-12 lg:space-y-16">
+      {values.map((v, i) => (
+        <article
+          data-reveal
+          style={`transition-delay: ${i * 60}ms`}
+          class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 pb-12 lg:pb-16 border-b border-cobalt-100/70 last:border-b-0"
+        >
+          <div class="lg:col-span-4">
+            <span class="font-display text-[80px] sm:text-[100px] lg:text-[120px] leading-none font-semibold text-cobalt-700/25 tabular-nums">
+              {v.number}
+            </span>
+          </div>
+          <div class="lg:col-span-8 lg:pt-4">
+            <h3 class="font-sans-display text-[26px] sm:text-[32px] lg:text-[38px] font-semibold leading-[1.1] tracking-[-0.02em] text-cobalt-900">
+              {v.title}
+            </h3>
+            <p class="mt-4 max-w-2xl text-[16px] sm:text-[17px] text-ink-700 leading-relaxed text-pretty">
+              {v.body}
+            </p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  {/* ───── QUOTE / PASIÓN ───── */}
+  <section class="relative isolate overflow-hidden bg-ivory-100 section-y">
+    <div aria-hidden class="absolute -top-20 left-1/4 size-[400px] rounded-full bg-cobalt-200/40 blur-[120px]"></div>
+    <div class="container-rp max-w-3xl text-center relative">
+      <span class="font-display text-[120px] leading-none text-cobalt-700/30 select-none block">
+        “
+      </span>
+      <p class="-mt-12 font-display text-[28px] sm:text-[36px] lg:text-[44px] leading-[1.15] tracking-tight text-cobalt-900 text-balance" data-reveal>
+        {locale === 'en'
+          ? 'We open the door to the recovery side of health — the part that doesn\'t wait for you to be sick.'
+          : 'Abrimos la puerta del lado de la salud que se recupera — el que no espera a que te enfermes.'}
+      </p>
+      <p class="mt-8 eyebrow text-cobalt-700" data-reveal>
+        {locale === 'en' ? 'Recovery Point · Mexicali, since 2024' : 'Recovery Point · Mexicali, desde 2024'}
+      </p>
+    </div>
+  </section>
+
+  {/* ───── CTA ───── */}
+  <section data-nav-theme="dark" class="relative isolate overflow-hidden bg-cobalt-900 section-y">
+    <div aria-hidden class="absolute inset-0 bg-dot-grid mask-fade-y opacity-10"></div>
+    <div aria-hidden class="absolute -top-40 -right-32 size-[600px] rounded-full bg-cobalt-700/25 blur-[140px]"></div>
+    <div class="container-rp text-center relative">
+      <h2 class="text-[36px] sm:text-[52px] font-display font-semibold leading-[1.04] tracking-tight text-balance max-w-3xl mx-auto text-white" data-reveal>
+        {locale === 'en' ? (
+          <>The fastest way to see it is to <em class="text-periwinkle-400">come in</em>.</>
+        ) : (
+          <>La forma más rápida de verlo es <em class="text-periwinkle-400">venir</em>.</>
+        )}
+      </h2>
+      <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center" data-reveal>
+        <a href={wa} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-cobalt-700 text-white text-[16px] font-semibold hover:bg-cobalt-800 transition-all btn-shimmer">
+          {t(locale, 'site.whatsappCta')}
+        </a>
+        <a href={telLink} class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-transparent text-white border border-white/30 text-[16px] font-semibold hover:bg-white/10 transition-all">
+          {t(locale, 'site.callCta')}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

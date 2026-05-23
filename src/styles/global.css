@@ -58,9 +58,13 @@
   --color-silver-200: #E5E7EB;
   --color-silver-300: #CBD5E1;
 
-  /* Fonts */
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  /* Fonts — V5 (Mario picked C+G visually):
+   *   Display = Newsreader (literary book serif, refined optical sizing)
+   *   Sans-display = Inter Tight (clean modern sans, heavier weights for CTAs)
+   *   Body = Inter (legibility) */
+  --font-display: "Newsreader", ui-serif, Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans-display: "Inter Tight", "Inter", ui-sans-serif, system-ui, sans-serif;
 
   /* Easings — exact values from research dossier, do not invent */
   --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
@@ -100,23 +104,33 @@
     body { font-size: 18px; }
   }
 
-  /* Display headings use Fraunces */
+  /* Newsreader — literary book serif with optical sizing.
+     Default weight 500 for body-level h1-h6, 600 for hero scale. */
   h1, h2, h3, h4, h5, h6,
   .font-display {
     font-family: var(--font-display);
-    font-feature-settings: "ss01", "ss02", "lnum";
-    letter-spacing: -0.015em;
-    line-height: 1.08;
+    font-feature-settings: "lnum", "kern", "ss01";
+    font-optical-sizing: auto;
+    letter-spacing: -0.018em;
+    line-height: 1.04;
     text-wrap: balance;
+    font-weight: 500;
+  }
+  h1, .font-display.text-hero {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  /* Inter Tight for sans-display moments (CTAs, eyebrows) */
+  .font-sans-display {
+    font-family: var(--font-sans-display);
   }
 
-  /* Italic accents in serif headings always cobalt — per pattern
-     "Tu lugar para *recuperarte*" with the verb cobalt italic */
+  /* Accent words inside headings — Mario hates italics. Use color contrast
+     only (mint on dark, cobalt-600 on light) for emphasis, never font-style. */
   h1 em, h2 em, h3 em,
   .font-display em {
     color: var(--color-cobalt-600);
-    font-style: italic;
-    font-feature-settings: "ss01";
+    font-style: normal;
   }
 
   ::selection {
@@ -147,7 +161,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    color: var(--color-mint-600);
+    color: var(--color-cobalt-700);
   }
 
   /* Container — consistent max-width across sections */
@@ -173,8 +187,8 @@
     padding-inline: 0.625rem;
     height: 1.5rem;
     border-radius: 999px;
-    background: var(--color-mint-50);
-    color: var(--color-mint-700);
+    background: var(--color-cobalt-50);
+    color: var(--color-cobalt-800);
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.05em;
@@ -208,13 +222,108 @@
 
   /* Marquee — used on press logos infinite loop */
   @keyframes marquee-x {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
   }
   .animate-marquee {
     animation: marquee-x 32s linear infinite;
   }
   .animate-marquee:hover { animation-play-state: paused; }
+
+  /* Aurora — used on full-bleed premium hero backgrounds */
+  @keyframes aurora {
+    from { background-position: 50% 50%, 50% 50%; }
+    to   { background-position: 350% 50%, 350% 50%; }
+  }
+
+  /* Float — mesh orb idle drift */
+  @keyframes float {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50%      { transform: translate3d(40px, -30px, 0) scale(1.06); }
+  }
+
+  /* Scrollbar suppression — horizontal-scroll service shelves */
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+
+  /* Dot grid background pattern — promotes from inline style to utility */
+  .bg-dot-grid {
+    background-image: radial-gradient(circle at 1px 1px, rgba(31, 45, 90, 0.18) 1px, transparent 0);
+    background-size: 28px 28px;
+  }
+  .mask-fade-y {
+    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 95%);
+            mask-image: linear-gradient(to bottom, black 30%, transparent 95%);
+  }
+
+  /* Link draw — underline draws on hover */
+  .link-draw {
+    position: relative;
+    display: inline-block;
+  }
+  .link-draw::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -2px;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 500ms var(--ease-out-quart);
+  }
+  .link-draw:hover::after { transform: scaleX(1); }
+
+  /* Header backdrop — transparent over hero (data-scrolled=false), solid
+     with blur once user scrolls (data-scrolled=true). Mario explicitly
+     wants ZERO division at landing, separator appearing only on scroll. */
+  /* Tailwind v4's `*` preflight ships --tw-backdrop-* vars that hijack any
+     `backdrop-filter` we set, so we use solid 95% bg + soft shadow on scroll
+     instead. Same visual separation, no cascade fight. */
+  #rp-header {
+    background: transparent !important;
+    border-bottom: 1px solid transparent !important;
+    box-shadow: none !important;
+  }
+  #rp-header[data-scrolled="true"][data-theme="light"] {
+    background: rgba(251, 248, 242, 0.97) !important;  /* ivory-50 / 97% */
+    border-bottom-color: rgba(225, 230, 244, 0.7) !important; /* cobalt-100 / 70% */
+    box-shadow: 0 1px 3px rgba(31, 45, 90, 0.04), 0 6px 24px -8px rgba(31, 45, 90, 0.08) !important;
+  }
+  #rp-header[data-scrolled="true"][data-theme="dark"] {
+    background: rgba(19, 28, 58, 0.97) !important;  /* cobalt-900 / 97% */
+    border-bottom-color: rgba(255, 255, 255, 0.18) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), 0 8px 28px -10px rgba(0, 0, 0, 0.35) !important;
+  }
+
+  /* Header nav theming — light vs dark adapt automatically via JS scroll
+     observer setting data-theme on #rp-header. Each link inherits the proper
+     color so nothing visually disappears against the section behind it. */
+  #rp-header[data-theme="light"] .rp-nav-link        { color: var(--color-ink-700); }
+  #rp-header[data-theme="light"] .rp-nav-link:hover  { color: var(--color-cobalt-800); background: rgba(31, 45, 90, 0.04); }
+  #rp-header[data-theme="light"] .rp-nav-link-active { color: var(--color-cobalt-800); background: var(--color-cobalt-50); }
+  #rp-header[data-theme="dark"]  .rp-nav-link        { color: rgba(255, 255, 255, 0.85); }
+  #rp-header[data-theme="dark"]  .rp-nav-link:hover  { color: #FFFFFF; background: rgba(255, 255, 255, 0.10); }
+  #rp-header[data-theme="dark"]  .rp-nav-link-active { color: #FFFFFF; background: rgba(255, 255, 255, 0.15); }
+
+  /* Logo image inverts when on dark sections */
+  #rp-header[data-theme="dark"] a[aria-label*="Recovery Point"] img { filter: brightness(0) invert(1); }
+
+  /* Mobile menu icon adapts */
+  #rp-header[data-theme="dark"] #rp-menu-toggle { color: #FFFFFF; }
+  #rp-header[data-theme="light"] #rp-menu-toggle { color: var(--color-ink-700); }
+
+  /* Button shimmer — hover sweep on premium CTAs */
+  .btn-shimmer { position: relative; overflow: hidden; }
+  .btn-shimmer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 900ms var(--ease-out-quart);
+    pointer-events: none;
+  }
+  .btn-shimmer:hover::before { transform: translateX(120%); }
 
   /* "Underline draw" — service card hover title accent */
   .underline-draw {
@@ -245,3 +354,11 @@
     scroll-behavior: auto !important;
   }
 }
+
+  /* Reels carousel — hide scrollbar across browsers + ensure smooth autoscroll
+     (no snap-mandatory because that would fight the rAF-driven loop). */
+  .rp-reels-track::-webkit-scrollbar { display: none; }
+  .rp-reels-track { -webkit-overflow-scrolling: touch; }
+
+  /* Reels marquee superseded by JS-driven scrollLeft so swipe-during-pause
+     keeps working. Old @keyframes removed. */

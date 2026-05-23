@@ -1,0 +1,99 @@
+---
+/**
+ * EditorialSection — Infusion-style numbered section.
+ *
+ * "01 ~ ESSENTIAL NUTRIENTS" pattern: numbered eyebrow, big serif headline,
+ * body copy, optional benefits list — paired with a real photo. Alternates
+ * left/right by row index. Each section is its own visual chapter, not a
+ * card-grid item — that's the "editorial" feel.
+ *
+ * Used to present the core therapies on the home as 4-5 vertical chapters
+ * (IV / NAD+ / Cryo / Sauna / Massage).
+ */
+interface Props {
+  number: string   // e.g. "01"
+  eyebrow: string  // e.g. "PROTOCOLO MÉDICO"
+  title: string    // HTML allowed for <em>italic</em>
+  copy: string
+  image: string    // /img/services/iv.webp?v=12
+  imageAlt: string
+  cta: { label: string; href: string; external?: boolean }
+  /** Even rows: image left. Odd rows: image right. Computed by parent via prop. */
+  imageRight?: boolean
+  /** Accent for eyebrow + number color */
+  accent?: 'cobalt' | 'mint' | 'amber'
+}
+
+const {
+  number, eyebrow, title, copy, image, imageAlt, cta, imageRight = false, accent = 'cobalt',
+} = Astro.props as Props
+
+const accentColor = {
+  cobalt: 'text-cobalt-600',
+  mint:   'text-cobalt-700',
+  amber:  'text-amber-600',
+}[accent]
+---
+
+<section class="container-rp section-y">
+  <div class={`grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center`}>
+    {/* Image */}
+    <div
+      class={`lg:col-span-6 ${imageRight ? 'lg:order-2' : ''}`}
+      data-reveal
+      style="transition-delay: 80ms"
+    >
+      <div class="relative aspect-[4/5] rounded-3xl overflow-hidden ring-1 ring-cobalt-100 shadow-[0_40px_80px_-30px_rgba(31,45,90,0.28)]">
+        <picture>
+          <source srcset={image} type="image/webp" />
+          <img
+            src={image}
+            alt={imageAlt}
+            loading="lazy"
+            class="absolute inset-0 size-full object-cover"
+          />
+        </picture>
+      </div>
+    </div>
+
+    {/* Text */}
+    <div class={`lg:col-span-6 ${imageRight ? 'lg:order-1' : ''}`}>
+      {/* Number + eyebrow row */}
+      <div class="flex items-baseline gap-4" data-reveal>
+        <span class={`font-display text-[80px] sm:text-[100px] leading-none font-semibold tabular-nums ${accentColor} opacity-30`}>
+          {number}
+        </span>
+        <span class={`text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.22em] ${accentColor}`}>
+          {eyebrow}
+        </span>
+      </div>
+
+      <h2
+        class="mt-4 font-display text-[44px] sm:text-[60px] lg:text-[72px] font-bold leading-[0.96] tracking-tight text-balance"
+        data-reveal
+        set:html={title}
+      />
+
+      <p
+        class="mt-6 text-[17px] sm:text-[18px] text-ink-700 leading-relaxed text-pretty max-w-xl"
+        data-reveal
+      >
+        {copy}
+      </p>
+
+      <div class="mt-8" data-reveal>
+        <a
+          href={cta.href}
+          {...(cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          class="inline-flex items-center gap-2 text-[15px] font-semibold text-cobalt-800 hover:text-cobalt-900 transition-colors group"
+        >
+          <span class="link-draw">{cta.label}</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition-transform duration-[var(--duration-micro)] group-hover:translate-x-1">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,100 @@
+---
+/**
+ * /espacio — photo tour of the Recovery Point Mexicali clinic.
+ *
+ * 100% real photography, no stock. Used to set expectations before the
+ * visit. Categorized: IV lounges, sauna, cryo, red light, recovery.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { t, getLocaleFromPath } from '@/i18n/messages'
+import { whatsappLink } from '@/lib/contact'
+
+const locale = getLocaleFromPath(Astro.url.pathname)
+const wa = whatsappLink('generic')
+
+// 8-tile uniform grid with reception + chiro added 2026-05-23 (Mario sent
+// real reception + VIP client + fisio + Soles de Mexicali photos from the
+// old WP site). Order = visitor journey: reception → IV social → VIP →
+// crio → sauna → red light → ice → chiropraxia/fisio.
+const photos = [
+  { src: '/img/services/reception.webp?v=24', title: 'Recepción',              subtitle: 'Te recibimos por tu nombre · escritorio principal' },
+  { src: '/img/services/iv-social.webp?v=24', title: 'Sala IV social',         subtitle: 'Hasta 4 sillones reclinables · botas de compresión incluidas' },
+  { src: '/img/services/iv-vip.webp?v=24',    title: 'Sala VIP privada',       subtitle: 'Dos plazas · panel acústico · privacidad total' },
+  { src: '/img/services/cryo.webp?v=24',      title: 'Crioterapia',            subtitle: 'Cabina de nitrógeno · −110 °C en 3 minutos' },
+  { src: '/img/services/sauna.webp?v=24',     title: 'Sauna infrarrojo',       subtitle: 'Cedro real · infrarrojo lejano · 30 min' },
+  { src: '/img/services/redlight.webp?v=24',  title: 'Red Light Bed',          subtitle: 'Fotobiomodulación · 660 + 850 nm · 20 min' },
+  { src: '/img/services/ice.webp?v=24',       title: 'Tina de hielo',          subtitle: 'Inmersión guiada · 5 °C · respiración asistida' },
+  { src: '/img/services/fisio.webp?v=24',     title: 'Fisioterapia',           subtitle: 'Camilla · escalera sueca · plan personalizado' },
+]
+---
+
+<BaseLayout
+  title={t(locale, 'nav.space')}
+  description={t(locale, 'space.hero.subtitle')}
+>
+  {/* ───── HERO ───── */}
+  <section class="relative isolate overflow-hidden bg-ivory-50">
+    <div aria-hidden class="absolute inset-0 -z-10 bg-dot-grid mask-fade-y opacity-[0.18]"></div>
+    <div class="container-rp pt-24 pb-12 sm:pt-32 sm:pb-16">
+      <p class="eyebrow" data-reveal>{t(locale, 'space.hero.eyebrow')}</p>
+      <h1
+        class="mt-5 text-[44px] sm:text-[68px] lg:text-[88px] font-display font-semibold leading-[0.98] tracking-tight text-balance max-w-4xl"
+        data-reveal
+      >
+        Conoce el lugar antes de <em>venir</em>.
+      </h1>
+      <p class="mt-7 max-w-2xl text-[17px] sm:text-[20px] text-ink-700 leading-relaxed text-pretty" data-reveal>
+        {t(locale, 'space.hero.subtitle')}
+      </p>
+    </div>
+  </section>
+
+  {/* ───── UNIFORM GRID — 3 cols desktop, 2 cols mobile, 4:5 ratio ───── */}
+  <section class="container-rp pb-16 sm:pb-24">
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+      {photos.map((p, i) => (
+        <figure
+          data-reveal
+          style={`transition-delay: ${i * 60}ms`}
+          class="group relative overflow-hidden rounded-3xl bg-cobalt-100 ring-1 ring-cobalt-100/70 aspect-[4/5] hover:ring-2 hover:ring-cobalt-300 hover:shadow-[0_30px_60px_-30px_rgba(31,45,90,0.3)] transition-all duration-[var(--duration-reveal)] [transition-timing-function:var(--ease-out-quart)]"
+        >
+          <picture>
+            <source srcset={p.src} type="image/webp" />
+            <img
+              src={p.src}
+              alt={p.title}
+              loading="lazy"
+              class="absolute inset-0 size-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
+            />
+          </picture>
+          <figcaption class="absolute inset-x-0 bottom-0 p-4 sm:p-5 bg-gradient-to-t from-cobalt-900/90 via-cobalt-900/40 to-transparent text-white">
+            <h3 class="font-sans-display text-[15px] sm:text-[17px] font-semibold leading-tight tracking-tight">
+              {p.title}
+            </h3>
+            <p class="mt-1 text-[12px] sm:text-[13px] text-white/80 leading-snug">
+              {p.subtitle}
+            </p>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+
+  {/* ───── CTA ───── */}
+  <section data-nav-theme="dark" class="relative isolate overflow-hidden bg-cobalt-900 section-y">
+    <div aria-hidden class="absolute -top-40 -right-32 size-[600px] rounded-full bg-cobalt-700/25 blur-[140px]"></div>
+    <div class="container-rp text-center relative">
+      <h2 class="text-[36px] sm:text-[52px] font-display font-semibold leading-[1.04] tracking-tight text-balance max-w-3xl mx-auto text-white" data-reveal>
+        Hora de conocerlo en <em class="text-periwinkle-400">persona</em>.
+      </h2>
+      <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center" data-reveal>
+        <a href={wa} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-cobalt-700 text-white text-[16px] font-semibold hover:bg-cobalt-800 transition-all btn-shimmer">
+          {t(locale, 'site.whatsappCta')}
+        </a>
+        <a href="/contacto" class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-transparent text-white border border-white/30 text-[16px] font-semibold hover:bg-white/10 transition-all">
+          Ver ubicación
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

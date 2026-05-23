@@ -33,10 +33,75 @@ export const ADDRESS = {
   mapsUrl: 'https://maps.app.goo.gl/recoverypointmexicali',
 }
 
-export const HOURS = [
-  { dow: 'Mo,Tu,We,Th,Fr', opens: '07:00', closes: '21:00' },
-  { dow: 'Sa,Su',          opens: '07:00', closes: '16:00' },
-] as const
+/**
+ * Clinic hours.  Sourced from Supabase `clinic_hours` table at build time
+ * via `scripts/fetch-clinic-hours.mjs` (runs in `prebuild`).  The admin
+ * panel is now the single source of truth — when Mario or any admin edits
+ * hours in /clinic-settings, the next deploy picks up the new values.
+ *
+ * If the build-time fetch fails, the script writes the same fallback that
+ * matches the migration seed (Mon-Fri 7-21, Sat-Sun 7-16) so the build
+ * never breaks on a Supabase outage.
+ */
+import clinicHoursData from '@/data/clinic-hours.json'
+
+interface ClinicHourRow {
+  day_of_week: number
+  label_es: string
+  label_en: string
+  is_open: boolean
+  opens: string       // 'HH:MM:SS'
+  closes: string
+}
+
+const hoursRows = (clinicHoursData.hours as ClinicHourRow[]) ?? []
+
+/** Compact schema.org-compatible HOURS array. Days with the same window are
+ *  collapsed into one row.  Closed days are skipped. */
+function buildCompactHours(rows: ClinicHourRow[]): { dow: string; opens: string; closes: string }[] {
+  const dowCodes = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']  // 0=Mon..6=Sun
+  // Group days by (opens, closes) tuple
+  const groups = new Map<string, string[]>()
+  for (const r of rows) {
+    if (!r.is_open) continue
+    const key = `${r.opens.slice(0, 5)}__${r.closes.slice(0, 5)}`
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key)!.push(dowCodes[r.day_of_week])
+  }
+  return [...groups.entries()].map(([key, days]) => {
+    const [opens, closes] = key.split('__')
+    return { dow: days.join(','), opens, closes }
+  })
+}
+
+export const HOURS = buildCompactHours(hoursRows)
+
+/** Format a "HH:MM" 24-hour string into a "h:mm am/pm" 12-hour string —
+ *  Mario flagged 2026-05-23 that bare "7:00 — 21:00" reads as "7 a 9am" to
+ *  customers used to 12-hour Mexican usage.  Returns lowercase am/pm with no
+ *  leading zero on the hour (e.g. "7:00 am", "9:00 pm"). */
+export function formatTime12h(hhmm: string): string {
+  const [h, m] = hhmm.split(':').map(Number)
+  const period = h >= 12 ? 'pm' : 'am'
+  const hour12 = h % 12 === 0 ? 12 : h % 12
+  return `${hour12}:${String(m).padStart(2, '0')} ${period}`
+}
+
+/** Detailed per-day list — used by /contacto for the legible "Lun a Vie" copy. */
+export const HOURS_DETAILED = hoursRows.map((r) => {
+  const opens24  = r.opens.slice(0, 5)
+  const closes24 = r.closes.slice(0, 5)
+  return {
+    dayOfWeek: r.day_of_week,
+    labelEs: r.label_es,
+    labelEn: r.label_en,
+    isOpen: r.is_open,
+    opens: opens24,
+    closes: closes24,
+    opens12: formatTime12h(opens24),
+    closes12: formatTime12h(closes24),
+  }
+})
 
 export const SOCIAL = {
   instagram: 'https://instagram.com/recoverypointmx',

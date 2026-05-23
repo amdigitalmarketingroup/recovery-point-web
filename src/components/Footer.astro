@@ -15,22 +15,22 @@ const { locale } = Astro.props as Props
 const year = new Date().getFullYear()
 const wa = whatsappLink('generic')
 
-// Same `ready` flag as Header — only render footer links to pages that exist.
+// All footer links now real pages
 const colServices = [
-  { href: localizedPath(locale, '/servicios'),         label: t(locale, 'nav.services'),                   ready: true  },
-  { href: localizedPath(locale, '/servicios/iv'),      label: 'IV Therapy',                                ready: false },
-  { href: localizedPath(locale, '/nad'),               label: 'NAD+',                                      ready: false },
-  { href: localizedPath(locale, '/servicios/masajes'), label: t(locale, 'services.items.massage.short'),   ready: false },
-  { href: localizedPath(locale, '/servicios/sauna'),   label: t(locale, 'services.items.sauna.short'),     ready: false },
-  { href: localizedPath(locale, '/servicios/cryo'),    label: t(locale, 'services.items.cryo.short'),      ready: false },
+  { href: localizedPath(locale, '/servicios'),         label: t(locale, 'nav.services'),                   ready: true },
+  { href: localizedPath(locale, '/servicios/iv'),      label: 'IV Therapy',                                ready: true },
+  { href: localizedPath(locale, '/nad'),               label: 'NAD+',                                      ready: true },
+  { href: localizedPath(locale, '/servicios/masajes'), label: t(locale, 'services.items.massage.short'),   ready: true },
+  { href: localizedPath(locale, '/servicios/sauna'),   label: t(locale, 'services.items.sauna.short'),     ready: true },
+  { href: localizedPath(locale, '/servicios/cryo'),    label: t(locale, 'services.items.cryo.short'),      ready: true },
 ].filter((i) => i.ready)
 
 const colCompany = [
-  { href: localizedPath(locale, '/metodo'),   label: t(locale, 'nav.method'),   ready: false },
-  { href: localizedPath(locale, '/nosotros'), label: t(locale, 'nav.team'),     ready: false },
-  { href: localizedPath(locale, '/espacio'),  label: t(locale, 'nav.space'),    ready: false },
-  { href: localizedPath(locale, '/contacto'), label: t(locale, 'nav.contact'),  ready: true  },
-  { href: localizedPath(locale, '/reservar'), label: t(locale, 'nav.reserve'),  ready: false },
+  { href: localizedPath(locale, '/metodo'),   label: t(locale, 'nav.method'),   ready: true },
+  { href: localizedPath(locale, '/nosotros'), label: t(locale, 'nav.team'),     ready: true },
+  { href: localizedPath(locale, '/espacio'),  label: t(locale, 'nav.space'),    ready: true },
+  { href: localizedPath(locale, '/contacto'), label: t(locale, 'nav.contact'),  ready: true },
+  { href: localizedPath(locale, '/reservar'), label: t(locale, 'nav.reserve'),  ready: true },
 ].filter((i) => i.ready)
 
 const colLegal = [
@@ -114,7 +114,7 @@ const colLegal = [
             </a>
           </li>
           <li>
-            <a href={wa} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-mint-600 font-semibold hover:text-mint-700 transition-colors">
+            <a href={wa} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-cobalt-700 font-semibold hover:text-cobalt-800 transition-colors">
               WhatsApp →
             </a>
           </li>

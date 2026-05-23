@@ -24,7 +24,7 @@ const external = !href
 
 const variants: Record<Props['accent'], { bg: string; chip: string; ring: string; iconBg: string; iconText: string }> = {
   cobalt: { bg: 'bg-cobalt-50',     chip: 'bg-cobalt-100 text-cobalt-800', ring: 'hover:ring-cobalt-300', iconBg: 'bg-cobalt-100', iconText: 'text-cobalt-700' },
-  mint:   { bg: 'bg-mint-50',       chip: 'bg-mint-100 text-mint-700',     ring: 'hover:ring-mint-300',   iconBg: 'bg-mint-100',   iconText: 'text-mint-600' },
+  mint:   { bg: 'bg-cobalt-50',       chip: 'bg-cobalt-100 text-cobalt-800',     ring: 'hover:ring-cobalt-300',   iconBg: 'bg-cobalt-100',   iconText: 'text-cobalt-700' },
   amber:  { bg: 'bg-amber-200/30',  chip: 'bg-amber-300/40 text-amber-600 [color:var(--color-cobalt-800)]', ring: 'hover:ring-amber-300', iconBg: 'bg-amber-300/60', iconText: 'text-cobalt-800' },
 }
 const v = variants[accent]

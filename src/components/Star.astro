@@ -1,0 +1,22 @@
+---
+/**
+ * Star icon — premium 5-point star, slightly elongated for an editorial feel.
+ * Used in the "4.9★ +200 reseñas" trust card. Designed in-house to match the
+ * brand's tight letter-spacing; the Unicode ★ glyph in DM Serif Display
+ * reads cheap, so this replaces it.
+ */
+interface Props { size?: number; class?: string; fill?: string }
+const { size = 18, class: cls = '', fill = 'currentColor' } = Astro.props as Props
+---
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill={fill}
+  stroke="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+  class={cls}
+>
+  <path d="M12 1.8 L14.85 8.74 L22.3 9.4 L16.65 14.4 L18.4 21.7 L12 17.85 L5.6 21.7 L7.35 14.4 L1.7 9.4 L9.15 8.74 Z"/>
+</svg>

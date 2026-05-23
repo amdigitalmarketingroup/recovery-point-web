@@ -1,0 +1,264 @@
+---
+/**
+ * /servicios/stem — Stem Cells / Células Madre.
+ *
+ * Mario flagged 2026-05-23: this service needs its OWN premium clinical
+ * aesthetic — not the standard bookable-service layout. Stem cells is the
+ * most premium offering at RP, applied only under consultation with
+ * ultra-personalized treatment per case. Tone here is private medical
+ * clinic, not wellness brand.
+ *
+ * Differences vs. ServiceDetailLayout:
+ *   - Dark cobalt-900 hero (instead of cream) — premium clinical signal
+ *   - "Por evaluación médica" lead, no "Reservar por WhatsApp" as primary CTA
+ *   - Indicaciones + Contraindicaciones blocks (real medical structure)
+ *   - "Cómo procedemos" narrative section (4 phases of the protocol)
+ *   - Medical disclaimer footer
+ *   - Specific intent: "stem" — opens WA with consult-evaluation message
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { t, getLocaleFromPath } from '@/i18n/messages'
+import { whatsappLink, telLink } from '@/lib/contact'
+
+const locale = getLocaleFromPath(Astro.url.pathname)
+const wa = whatsappLink('stem')
+
+// Clinical content — grounded against admin DB (is_active:false, consulta 30 min,
+// price configured per case). NO invented prices. No marketing fluff.
+const indicaciones = [
+  { title: 'Lesión articular crónica', body: 'Donde la fisioterapia y los protocolos conservadores no logran restaurar función. Casos de rodilla, hombro, cadera o columna en evaluación ortopédica previa.' },
+  { title: 'Procesos degenerativos tempranos', body: 'Osteoartritis incipiente, condromalacia, lesiones de cartílago. La indicación se confirma con estudio de imagen.' },
+  { title: 'Recuperación post-quirúrgica', body: 'En casos donde la regeneración natural está limitada y el cirujano lo considera complementario al protocolo de rehabilitación.' },
+  { title: 'Anti-aging celular avanzado', body: 'Como complemento de un protocolo de longevidad ya iniciado (NAD+, micronutrientes, hábitos verificados). No como puerta de entrada al servicio.' },
+]
+
+const contraindicaciones = [
+  'Procesos oncológicos activos o no resueltos',
+  'Infecciones sistémicas o locales activas',
+  'Embarazo y lactancia',
+  'Trastornos hematológicos no compensados',
+  'Pacientes sin diagnóstico claro o expectativas no realistas',
+]
+
+const proceso = [
+  {
+    n: '01',
+    title: 'Conversación inicial',
+    body: 'Consulta de 30 minutos sin compromiso. Revisamos tu historial, indicación deseada, expectativas y resultados previos en tratamientos relacionados. Si tras esta conversación no es indicado para ti, te lo decimos directo.',
+  },
+  {
+    n: '02',
+    title: 'Evaluación clínica completa',
+    body: 'Si la indicación es plausible, pasamos a evaluación: estudios de laboratorio, imagen relevante (resonancia, ultrasonido) y revisión por especialista. Sin línea base no avanzamos.',
+  },
+  {
+    n: '03',
+    title: 'Diseño del protocolo',
+    body: 'Una vez confirmado, se diseña tu protocolo: tipo de aplicación, dosis, fases, tiempos. Recibes el plan por escrito con costos exactos antes de avanzar. Nunca cobramos sin documento firmado.',
+  },
+  {
+    n: '04',
+    title: 'Aplicación + seguimiento',
+    body: 'Aplicación en sala dedicada bajo médico especialista. Seguimiento estructurado en 30, 60 y 90 días, con ajustes según respuesta. Cada visita queda documentada en tu expediente clínico.',
+  },
+]
+---
+
+<BaseLayout
+  title="Células Madre · Stem Cells"
+  description="Medicina regenerativa con células madre en Recovery Point Mexicali. Protocolo médico bajo evaluación, sin atajos. Indicaciones, proceso clínico y consulta inicial."
+>
+  {/* ───── HERO — dark, clinical, premium ───── */}
+  <section data-nav-theme="dark" class="relative isolate overflow-hidden bg-cobalt-900 text-white">
+    <div aria-hidden class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_30%_30%,rgba(75,90,180,0.35),transparent_55%),radial-gradient(ellipse_at_70%_80%,rgba(245,201,125,0.18),transparent_50%)]"></div>
+    <div aria-hidden class="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,transparent,rgba(15,23,58,0.5))]"></div>
+
+    <div class="container-rp pt-28 pb-24 sm:pt-36 sm:pb-32 max-w-4xl">
+      <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-amber-300 inline-flex items-center gap-2.5" data-reveal>
+        <span class="inline-block size-1 rounded-full bg-amber-300"></span>
+        Medicina regenerativa · por evaluación
+      </p>
+      <h1
+        class="mt-7 font-display text-[48px] sm:text-[72px] lg:text-[88px] font-semibold leading-[0.98] tracking-tight text-balance"
+        data-reveal
+      >
+        Células Madre.<br />
+        <em class="text-periwinkle-400">Conversación primero.</em>
+      </h1>
+      <p class="mt-8 max-w-2xl text-[18px] sm:text-[20px] text-cobalt-100/90 leading-relaxed text-pretty" data-reveal>
+        Stem cells no es algo que se aplique en visita uno. Es un protocolo médico bajo evaluación previa,
+        ultrapersonalizado según indicación, historial y objetivos. Es nuestro servicio más premium —
+        no el más frecuente.
+      </p>
+
+      <div class="mt-12 flex flex-col sm:flex-row gap-3" data-reveal>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-amber-300 text-cobalt-900 text-[15px] font-semibold hover:bg-amber-200 transition-all duration-[var(--duration-micro)] [transition-timing-function:var(--ease-out-quart)]"
+        >
+          Solicitar evaluación inicial
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+        <a
+          href={telLink}
+          class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-transparent text-white border border-white/30 text-[15px] font-semibold hover:bg-white/10 transition-all"
+        >
+          Llamar a recepción
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* ───── INDICACIONES — when stem cells is even considered ───── */}
+  <section class="container-rp section-y max-w-5xl">
+    <p class="eyebrow" data-reveal>Indicaciones clínicas</p>
+    <h2
+      class="mt-4 font-display text-[36px] sm:text-[52px] lg:text-[60px] font-semibold leading-[1.04] tracking-tight text-balance"
+      data-reveal
+    >
+      Cuándo se considera <em>indicado</em>.
+    </h2>
+    <p class="mt-6 max-w-2xl text-[16px] sm:text-[17px] text-ink-700 leading-relaxed" data-reveal>
+      No promovemos stem cells como solución general. La indicación se evalúa caso por caso,
+      en consulta con especialista, y se confirma con estudios. Estas son las situaciones donde
+      tiene sentido evaluarlo:
+    </p>
+
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-7">
+      {indicaciones.map((it, i) => (
+        <article
+          data-reveal
+          style={`transition-delay: ${i * 80}ms`}
+          class="relative rounded-3xl bg-white border border-cobalt-100 p-7 sm:p-8 hover:border-cobalt-300 hover:shadow-[0_30px_60px_-30px_rgba(31,45,90,0.25)] transition-all duration-[var(--duration-reveal)] [transition-timing-function:var(--ease-out-quart)]"
+        >
+          <h3 class="font-sans-display text-[20px] sm:text-[22px] font-semibold leading-tight tracking-[-0.018em] text-cobalt-900">
+            {it.title}
+          </h3>
+          <p class="mt-3 text-[15px] text-ink-700 leading-relaxed">
+            {it.body}
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  {/* ───── PROCESO — 4-phase narrative, premium spacing ───── */}
+  <section class="relative isolate overflow-hidden bg-ivory-100 section-y">
+    <div aria-hidden class="pointer-events-none absolute -top-20 -left-20 size-[400px] rounded-full bg-cobalt-200/40 blur-[120px]"></div>
+    <div aria-hidden class="pointer-events-none absolute bottom-0 right-0 size-[440px] rounded-full bg-amber-200/40 blur-[140px]"></div>
+
+    <div class="container-rp relative max-w-5xl">
+      <p class="eyebrow" data-reveal>El proceso</p>
+      <h2
+        class="mt-4 font-display text-[36px] sm:text-[52px] lg:text-[60px] font-semibold leading-[1.04] tracking-tight text-balance"
+        data-reveal
+      >
+        Cuatro fases. <em>Sin atajos.</em>
+      </h2>
+
+      <div class="mt-16 space-y-14 sm:space-y-20">
+        {proceso.map((p, i) => (
+          <article
+            data-reveal
+            style={`transition-delay: ${i * 60}ms`}
+            class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 pb-12 lg:pb-16 border-b border-cobalt-100/70 last:border-b-0"
+          >
+            <div class="lg:col-span-3">
+              <span class="font-display text-[80px] sm:text-[100px] lg:text-[120px] leading-none font-semibold text-cobalt-700/25 tabular-nums">
+                {p.n}
+              </span>
+            </div>
+            <div class="lg:col-span-9 lg:pt-4">
+              <h3 class="font-sans-display text-[24px] sm:text-[30px] lg:text-[36px] font-semibold leading-[1.1] tracking-[-0.02em] text-cobalt-900">
+                {p.title}
+              </h3>
+              <p class="mt-4 max-w-2xl text-[16px] sm:text-[17px] text-ink-700 leading-relaxed text-pretty">
+                {p.body}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ───── CONTRAINDICACIONES — clinical responsibility ───── */}
+  <section class="container-rp section-y max-w-5xl">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+      <div class="lg:col-span-5">
+        <p class="eyebrow" data-reveal>Cuándo NO procede</p>
+        <h2
+          class="mt-4 font-display text-[30px] sm:text-[40px] lg:text-[48px] font-semibold leading-[1.05] tracking-tight text-balance"
+          data-reveal
+        >
+          Contraindicaciones <em>absolutas</em>.
+        </h2>
+        <p class="mt-6 text-[16px] text-ink-700 leading-relaxed" data-reveal>
+          Si tu caso entra en alguna de estas categorías, descartamos stem cells y te orientamos
+          al protocolo adecuado para tu situación. La responsabilidad clínica está antes que la venta.
+        </p>
+      </div>
+      <div class="lg:col-span-7">
+        <ul class="space-y-3" data-reveal>
+          {contraindicaciones.map((c) => (
+            <li class="flex gap-4 items-start py-3 border-b border-cobalt-100/60">
+              <span class="mt-1.5 inline-block size-1.5 rounded-full bg-cobalt-700 shrink-0"></span>
+              <span class="text-[15px] sm:text-[16px] text-ink-800 leading-relaxed">{c}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* ───── CIERRE / DISCLAIMER ───── */}
+  <section class="relative isolate overflow-hidden bg-cobalt-900 text-white section-y" data-nav-theme="dark">
+    <div aria-hidden class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(75,90,180,0.25),transparent_60%)]"></div>
+    <div class="container-rp relative max-w-3xl">
+      <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-amber-300" data-reveal>
+        Diseño clínico
+      </p>
+      <h2 class="mt-5 font-display text-[32px] sm:text-[44px] lg:text-[52px] font-semibold leading-[1.06] tracking-tight text-balance" data-reveal>
+        Cada caso, <em class="text-periwinkle-400">su protocolo</em>.
+      </h2>
+      <p class="mt-8 text-[16px] sm:text-[18px] text-cobalt-100/90 leading-relaxed text-pretty" data-reveal>
+        Ningún protocolo de células madre es igual a otro. La indicación, el tipo de aplicación,
+        los estudios necesarios y el seguimiento se diseñan a partir de tu evaluación. Por eso la
+        consulta inicial no es un trámite — es la base del tratamiento.
+      </p>
+      <p class="mt-6 text-[15px] text-cobalt-200/80 leading-relaxed" data-reveal>
+        Tras la consulta (30 min) recibes el plan por escrito con tiempos y expectativas realistas.
+        Si decides no avanzar, no hay compromiso.
+      </p>
+
+      <div class="mt-12 flex flex-col sm:flex-row gap-3" data-reveal>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-amber-300 text-cobalt-900 text-[15px] font-semibold hover:bg-amber-200 transition-all"
+        >
+          Solicitar evaluación inicial
+        </a>
+        <a
+          href="/servicios"
+          class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-transparent text-white border border-white/30 text-[15px] font-semibold hover:bg-white/10 transition-all"
+        >
+          Ver otros servicios
+        </a>
+      </div>
+
+      <p class="mt-14 text-[12px] text-cobalt-200/60 leading-relaxed border-t border-white/15 pt-6" data-reveal>
+        <strong class="text-cobalt-100">Aviso clínico:</strong> La terapia con células madre se aplica
+        únicamente bajo prescripción y supervisión de médico especialista. La información en esta página es
+        de carácter informativo y no sustituye una consulta médica. Resultados varían por caso. Recovery Point
+        no garantiza desenlaces específicos — la consulta inicial es la única vía para entender si tu caso
+        es candidato.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

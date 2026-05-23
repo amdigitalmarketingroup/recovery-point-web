@@ -1,0 +1,344 @@
+---
+/**
+ * Home — / (es-MX) — V3 Infusion-anchored editorial rebuild.
+ *
+ * Anchor: Infusion (infusion.com) — big serif wordmark hero section + numbered
+ * editorial chapters alternating photo+text. Trust cards lateral over the hero
+ * (Ulia pattern). Cormorant Garamond typography at proper magazine scale.
+ *
+ * Pacing:
+ *  1. WORDMARK HERO — magazine-cover-style: huge "Recovery Point" wordmark on
+ *     ivory with sub-hero photo and trust cards lateral (Ulia)
+ *  2. EDITORIAL CHAPTERS — 5 numbered sections alternating photo/text
+ *     (Sueroterapia, NAD+, Cryo + Ice, Sauna + Red Light, Masaje)
+ *  3. STATS dark band — Awwwards-pattern spring counters
+ *  4. "POR QUÉ" — sticky-aside narrative
+ *  5. FINAL CTA gradient
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import EditorialSection from '@/components/EditorialSection.astro'
+import CenteredIVBag from '@/components/CenteredIVBag'
+import ImmersiveHero from '@/components/ImmersiveHero'
+import StatsRow from '@/components/StatsRow'
+import ReelsCarousel from '@/components/ReelsCarousel'
+import Star from '@/components/Star.astro'
+import { Reveal, RevealItem } from '@/components/Reveal'
+import { t, getLocaleFromPath, localizedPath } from '@/i18n/messages'
+import { telLink, whatsappLink } from '@/lib/contact'
+
+// Locale from URL — works for both / (es) and /en/ (en).
+const locale = getLocaleFromPath(Astro.url.pathname)
+const wa = whatsappLink('generic')
+const whyItems = t(locale, 'home.why.items') as Array<{ title: string; description: string }>
+
+// Chapter content is i18n-driven now (home.chapters.* in messages.ts).
+// We keep visual props (number/accent/image/href) here, copy comes from t().
+// Mario explicitly asked: cryo + ice must be separate cards, sauna + RLB must
+// be separate cards, masaje + fisio must be separate cards. So we split the
+// previously-combined chapters into one-service-per-chapter.
+const chapterDefs = [
+  { key: 'iv',       number: '01', accent: 'cobalt' as const, image: '/img/services/iv-social.webp?v=24',       href: '/servicios/iv' },
+  { key: 'nad',      number: '02', accent: 'amber'  as const, image: '/img/services/nad.webp?v=21',      href: '/nad', imageRight: true },
+  { key: 'cryo',     number: '03', accent: 'cobalt' as const, image: '/img/services/cryo.webp?v=22',     href: '/servicios/cryo' },
+  { key: 'ice',      number: '04', accent: 'mint'   as const, image: '/img/services/ice.webp?v=21',      href: '/servicios/ice', imageRight: true },
+  { key: 'sauna',    number: '05', accent: 'amber'  as const, image: '/img/services/sauna.webp?v=21',    href: '/servicios/sauna' },
+  { key: 'redlight', number: '06', accent: 'cobalt' as const, image: '/img/services/redlight.webp?v=21', href: '/servicios/red-light', imageRight: true },
+  { key: 'massage',  number: '07', accent: 'cobalt' as const, image: '/img/services/massage.webp?v=21',  href: '/servicios/masajes' },
+  { key: 'fisio',    number: '08', accent: 'mint'   as const, image: '/img/services/fisio.webp?v=24',    href: '/servicios/fisio', imageRight: true },
+]
+const chapters = chapterDefs.map(c => ({
+  number: c.number,
+  accent: c.accent,
+  eyebrow: t(locale, `home.chapters.${c.key}.eyebrow`),
+  title:   t(locale, `home.chapters.${c.key}.title`),
+  copy:    t(locale, `home.chapters.${c.key}.copy`),
+  image:   c.image,
+  imageAlt: t(locale, `home.chapters.${c.key}.imageAlt`),
+  cta:     { label: t(locale, `home.chapters.${c.key}.ctaLabel`), href: localizedPath(locale, c.href) },
+  imageRight: c.imageRight,
+}))
+---
+
+<BaseLayout title={t(locale, 'home.hero.eyebrow')} description={t(locale, 'home.hero.subtitle')}>
+  {/* ───────────── 1. FULL-BLEED VIDEO HERO ─────────────
+      Mario sent reference: Stellar Stays-style furniture site with full-bleed
+      photo + overlay eyebrow pill, centered serif headline, bottom CTA pill.
+      We do the same with the IV bag video as the full-bleed background.
+      Trust cards row sits BELOW the hero on the cream bg. */}
+  <section class="relative isolate overflow-hidden bg-ivory-50 text-ink-900 min-h-[92vh] flex items-center">
+    {/* Full-bleed video background */}
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      poster="/img/hero/iv-bag-poster.jpg"
+      class="absolute inset-0 w-full h-full object-cover -z-10"
+      aria-hidden="true"
+    >
+      <source src="/img/hero/iv-bag.webm" type="video/webm" />
+      <source src="/img/hero/iv-bag.mp4" type="video/mp4" />
+    </video>
+
+    {/* Soft cream wash overlay — improves text legibility over the bag without killing the video */}
+    <div aria-hidden class="absolute inset-0 -z-10 bg-gradient-to-b from-ivory-50/85 via-ivory-50/40 to-ivory-50/85"></div>
+    <div aria-hidden class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(251,248,242,0.7)_85%)]"></div>
+
+    <div class="container-rp relative w-full text-center py-20 sm:py-24 lg:py-28">
+      {/* Top eyebrow pill — Stellar Stays style */}
+      <p
+        data-reveal
+        class="inline-flex items-center gap-2.5 px-5 h-9 rounded-full bg-white/90 backdrop-blur border border-cobalt-200/60 text-[11px] sm:text-[12px] uppercase tracking-[0.22em] font-semibold text-cobalt-700 font-sans-display shadow-[0_8px_24px_-12px_rgba(31,45,90,0.18)]"
+      >
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-cobalt-700 animate-pulse"></span>
+        {locale === 'en' ? 'Recovery clinic · Mexicali' : 'Clínica de recuperación · Mexicali'}
+      </p>
+
+      {/* Centered headline — Stellar Stays scale (≤72px hero). Mario flagged
+          the previous 152-180px headlines as "demasiado grandes". */}
+      <h1 class="mt-10 font-display leading-[1.02] tracking-[-0.02em] text-[40px] sm:text-[52px] md:text-[60px] lg:text-[68px] xl:text-[72px] text-cobalt-900 text-balance max-w-3xl mx-auto">
+        {locale === 'en' ? (
+          <>
+            <span class="block hero-line" style="animation-delay: 200ms">Recover. Hydrate.</span>
+            <span class="block hero-line" style="animation-delay: 380ms">Live <em class="text-cobalt-700">better</em>.</span>
+          </>
+        ) : (
+          <>
+            <span class="block hero-line" style="animation-delay: 200ms">Recupérate. Hidrata.</span>
+            <span class="block hero-line" style="animation-delay: 380ms">Vive <em class="text-cobalt-700">mejor</em>.</span>
+          </>
+        )}
+      </h1>
+
+      <style>
+        .hero-line {
+          opacity: 0;
+          transform: translateY(40px);
+          animation: hero-line-in 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes hero-line-in {
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-line { animation: none; opacity: 1; transform: none; }
+        }
+      </style>
+
+      {/* Subtitle */}
+      <p
+        data-reveal
+        class="mt-10 max-w-2xl mx-auto text-[17px] sm:text-[19px] text-ink-800 leading-relaxed text-pretty font-medium"
+        style="text-shadow: 0 0 16px rgba(251,248,242,0.85);"
+      >
+        {t(locale, 'home.hero.subtitle')}
+      </p>
+
+      {/* CTA pair — Stellar Stays style centered */}
+      <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center" data-reveal>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-sans-display inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-cobalt-900 text-white text-[15px] font-semibold hover:bg-cobalt-800 hover:shadow-lg hover:shadow-cobalt-900/40 transition-all duration-[var(--duration-micro)] [transition-timing-function:var(--ease-out-quart)] active:scale-[0.98] btn-shimmer"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+          {t(locale, 'site.whatsappCta')}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+        <a
+          href={localizedPath(locale, '/servicios')}
+          class="font-sans-display inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-white/95 backdrop-blur text-cobalt-900 border border-cobalt-200 text-[15px] font-semibold hover:bg-white hover:border-cobalt-400 transition-all"
+        >
+          {t(locale, 'home.hero.secondaryCta')}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* Trust cards row — sits BELOW the video hero on cream bg */}
+  <section class="relative bg-ivory-50 pb-16 sm:pb-20">
+    <div class="container-rp">
+      <div class="flex flex-wrap items-stretch justify-center gap-4 max-w-4xl mx-auto" data-reveal>
+        <div class="flex-1 min-w-[200px] max-w-[300px] rounded-2xl p-5 bg-white border border-cobalt-100 shadow-[0_12px_36px_-18px_rgba(31,45,90,0.15)]">
+          <p class="font-display text-[44px] leading-none text-cobalt-900 tabular-nums tracking-tight">+5,000</p>
+          <p class="mt-2 font-sans-display text-[11px] uppercase tracking-[0.16em] text-ink-500 font-semibold leading-tight">{locale === 'en' ? 'Sessions delivered' : 'Sesiones realizadas'}</p>
+        </div>
+        <div class="flex-1 min-w-[200px] max-w-[300px] rounded-2xl p-5 bg-cobalt-900 border border-cobalt-900 shadow-[0_12px_36px_-18px_rgba(31,45,90,0.4)]">
+          <p class="font-display text-[44px] leading-none text-white tabular-nums tracking-tight inline-flex items-center gap-1.5">
+            5.0 <Star size={32} class="text-amber-400" />
+          </p>
+          <p class="mt-2 font-sans-display text-[11px] uppercase tracking-[0.16em] text-cobalt-200 font-semibold leading-tight">{locale === 'en' ? 'Google reviews' : 'Reseñas en Google'}</p>
+        </div>
+        <div class="flex-1 min-w-[200px] max-w-[300px] rounded-2xl p-5 bg-white border border-cobalt-100 shadow-[0_12px_36px_-18px_rgba(31,45,90,0.15)]">
+          <p class="font-display text-[44px] leading-none text-cobalt-900 tabular-nums tracking-tight">28</p>
+          <p class="mt-2 font-sans-display text-[11px] uppercase tracking-[0.16em] text-ink-500 font-semibold leading-tight">{locale === 'en' ? 'IVs on the menu' : 'Sueros activos en menú'}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ───────────── 2. EDITORIAL CHAPTERS — Infusion alternating ───────────── */}
+  <div class="bg-ivory-50">
+    {chapters.map((ch, i) => (
+      <EditorialSection
+        number={ch.number}
+        eyebrow={ch.eyebrow}
+        title={ch.title}
+        copy={ch.copy}
+        image={ch.image}
+        imageAlt={ch.imageAlt}
+        cta={ch.cta}
+        imageRight={!!ch.imageRight}
+        accent={ch.accent}
+      />
+    ))}
+  </div>
+
+  {/* ───────────── 3. STATS DARK BAND ───────────── */}
+  <StatsRow client:visible locale={locale} />
+
+  {/* ───────────── 3.5 IG REELS CAROUSEL ───────────── */}
+  <ReelsCarousel
+    client:visible
+    locale={locale}
+    reels={[
+      { slug: 'DIPPp1-ydxp', caption: '', category: 'organico' },
+      { slug: 'DIe5JQQzHtS', caption: '', category: 'organico' },
+      { slug: 'DJFct1WzkOO', caption: '', category: 'organico' },
+      { slug: 'DYgnI1zvkdi', caption: '', category: 'organico' },
+    ]}
+  />
+
+  {/* ───────────── 3.7 TESTIMONIOS — real Google reviews ───────────── */}
+  <section class="relative section-y bg-ivory-100/60 overflow-hidden">
+    <div aria-hidden class="pointer-events-none absolute -top-20 -left-20 size-[420px] rounded-full bg-cobalt-200/40 blur-[120px]"></div>
+    <div aria-hidden class="pointer-events-none absolute bottom-0 right-0 size-[360px] rounded-full bg-amber-200/40 blur-[120px]"></div>
+    <div class="container-rp relative">
+      <div class="max-w-3xl mb-12 sm:mb-16">
+        <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-cobalt-600 inline-flex items-center gap-2" data-reveal>
+          <Star size={16} class="text-amber-400" /> {t(locale, 'home.testimonials.eyebrow')}
+        </p>
+        <h2 class="mt-3 font-display text-[36px] sm:text-[52px] lg:text-[64px] font-semibold leading-[1.02] tracking-tight text-balance" data-reveal>
+          {t(locale, 'home.testimonials.title')}
+        </h2>
+        <p class="mt-5 inline-flex items-center gap-3 text-[14px] text-ink-700">
+          <span class="inline-flex items-center font-display font-semibold text-[36px] text-cobalt-900 tabular-nums">5.0</span>
+          <span class="inline-flex items-center gap-1 text-amber-400">
+            <Star size={18} class="text-amber-400" /><Star size={18} class="text-amber-400" /><Star size={18} class="text-amber-400" /><Star size={18} class="text-amber-400" /><Star size={18} class="text-amber-400" />
+          </span>
+          <span class="text-ink-600">·  36 reseñas en Google</span>
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        {/* Cast outside template — Astro parses `Array<{` as JSX. */}
+        {((t(locale, 'home.testimonials.items')) as { author: string; date: string; text: string }[]).map((rev, i) => (
+          <figure
+            data-reveal
+            style={`transition-delay: ${i * 60}ms`}
+            class="relative flex flex-col gap-4 p-6 sm:p-7 rounded-3xl bg-white/55 backdrop-blur-2xl backdrop-saturate-150 ring-1 ring-white/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_30px_-12px_rgba(31,45,90,0.18)]"
+          >
+            <div class="flex items-center gap-1 text-amber-400">
+              <Star size={14} class="text-amber-400" /><Star size={14} class="text-amber-400" /><Star size={14} class="text-amber-400" /><Star size={14} class="text-amber-400" /><Star size={14} class="text-amber-400" />
+            </div>
+            <blockquote class="text-[14px] sm:text-[15px] text-ink-800 leading-relaxed text-pretty">
+              “{rev.text}”
+            </blockquote>
+            <figcaption class="mt-auto pt-3 border-t border-white/40 flex items-center justify-between">
+              <span class="font-sans-display text-[13px] font-semibold text-cobalt-900">{rev.author}</span>
+              <span class="text-[11px] uppercase tracking-[0.12em] text-ink-500">{rev.date}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <div class="mt-10 flex" data-reveal>
+        <a
+          href="https://www.google.com/maps/place/Recovery+Point/@32.6,-115.5,17z"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-[14px] font-semibold text-cobalt-800 hover:text-cobalt-900"
+        >
+          <span class="link-draw">{t(locale, 'home.testimonials.viewAll')}</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* ───────────── 4. POR QUÉ RP — sticky-aside ───────────── */}
+  <section class="relative section-y bg-ivory-50">
+    <div class="container-rp grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-4 lg:sticky lg:top-28 self-start">
+        <p class="eyebrow" data-reveal>{t(locale, 'home.why.eyebrow')}</p>
+        <h2 class="mt-3 font-display text-[40px] sm:text-[56px] lg:text-[64px] font-bold leading-[0.98] tracking-tight text-balance" data-reveal>
+          No somos una clínica <em>más</em>.
+        </h2>
+        <p class="mt-5 text-ink-700 leading-relaxed text-pretty" data-reveal>
+          Cinco diferencias específicas. Cada una pesa cuando estás eligiendo dónde te tratas.
+        </p>
+      </div>
+
+      <Reveal className="lg:col-span-8 space-y-4">
+        {whyItems.map((item, i) => (
+          <RevealItem className="">
+            <div class="flex items-start gap-5 p-6 sm:p-8 rounded-3xl bg-white border border-cobalt-100/60 hover:border-cobalt-300 hover:shadow-[0_30px_60px_-30px_rgba(31,45,90,0.25)] transition-all duration-[var(--duration-reveal)] [transition-timing-function:var(--ease-out-quart)]">
+              <span class="shrink-0 inline-flex items-center justify-center w-14 h-14 rounded-full bg-cobalt-50 text-cobalt-700 font-display font-semibold tabular-nums text-[24px] ring-1 ring-cobalt-100">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 class="font-display text-[24px] sm:text-[30px] font-semibold leading-tight text-ink-900">
+                  {item.title}
+                </h3>
+                <p class="mt-3 text-[15px] sm:text-[16px] text-ink-700 leading-relaxed text-pretty">
+                  {item.description}
+                </p>
+              </div>
+            </div>
+          </RevealItem>
+        ))}
+      </Reveal>
+    </div>
+  </section>
+
+  {/* ───────────── 5. FINAL CTA ───────────── */}
+  <section data-nav-theme="dark" class="relative isolate overflow-hidden bg-cobalt-900 section-y">
+    <div aria-hidden class="absolute -top-32 -left-32 size-[600px] rounded-full bg-cobalt-500/25 blur-[140px]"></div>
+    <div aria-hidden class="absolute -bottom-40 -right-40 size-[540px] rounded-full bg-cobalt-700/25 blur-[140px]"></div>
+    <div aria-hidden class="absolute inset-0 bg-dot-grid mask-fade-y opacity-10"></div>
+
+    <div class="container-rp text-center relative">
+      <p class="eyebrow text-periwinkle-400 inline-flex items-center gap-2" data-reveal>
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-cobalt-600 animate-pulse"></span>
+        Empieza por aquí
+      </p>
+      <h2 class="mt-4 text-[44px] sm:text-[72px] lg:text-[96px] font-display font-bold leading-[0.96] tracking-tight text-balance max-w-4xl mx-auto text-white" data-reveal>
+        Sentirte <em class="text-periwinkle-400">mejor</em> mañana mismo.
+      </h2>
+      <p class="mt-6 max-w-xl mx-auto text-[16px] sm:text-[19px] text-white/85 leading-relaxed text-pretty" data-reveal>
+        {t(locale, 'home.cta.subtitle')}
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center" data-reveal>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-cobalt-700 text-white text-[16px] font-semibold hover:bg-cobalt-800 hover:shadow-lg hover:shadow-cobalt-800/40 transition-all duration-[var(--duration-micro)] [transition-timing-function:var(--ease-out-quart)] active:scale-[0.98] btn-shimmer"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+          {t(locale, 'home.cta.primary')}
+        </a>
+        <a
+          href={telLink}
+          class="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-transparent text-white border border-white/30 text-[16px] font-semibold hover:bg-white/10 hover:border-white/60 transition-all"
+        >
+          {t(locale, 'home.cta.secondary')}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

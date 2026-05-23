@@ -28,15 +28,15 @@ export interface ServiceEntry {
 }
 
 export const SERVICES: ServiceEntry[] = [
-  { id: 'iv-vip',       slug: 'iv',         i18nKey: 'iv',       pillar: 'recovery', durationMin: 60, priceMxn: 1500, priceRange: [900, 4800], capacity: 2, icon: 'Droplet',    cover: '/img/services/iv.webp',       accent: 'cobalt' },
-  { id: 'masoterapia',  slug: 'masajes',    i18nKey: 'massage',  pillar: 'recovery', durationMin: 60, priceMxn: 800,  priceRange: [650, 1200], capacity: 1, icon: 'Hand',       cover: '/img/services/massage.webp',  accent: 'periwinkle' },
-  { id: 'sauna',        slug: 'sauna',      i18nKey: 'sauna',    pillar: 'recovery', durationMin: 30, priceMxn: 355,  capacity: 2,             icon: 'Flame',      cover: '/img/services/sauna.webp',    accent: 'amber' },
-  { id: 'cryo',         slug: 'cryo',       i18nKey: 'cryo',     pillar: 'recovery', durationMin: 3,  priceMxn: 900,  capacity: 1,             icon: 'Snowflake',  cover: '/img/services/cryo.webp',     accent: 'cobalt' },
-  { id: 'ice-plunge',   slug: 'ice',        i18nKey: 'ice',      pillar: 'recovery', durationMin: 15, priceMxn: 500,  capacity: 1,             icon: 'Waves',      cover: '/img/services/ice.webp',      accent: 'mint' },
-  { id: 'red-light',    slug: 'red-light',  i18nKey: 'redlight', pillar: 'beauty',   durationMin: 30, priceMxn: 600,  capacity: 1,             icon: 'Sun',        cover: '/img/services/redlight.webp', accent: 'amber' },
-  { id: 'boots',        slug: 'botas',      i18nKey: 'boots',    pillar: 'recovery', durationMin: 30, priceMxn: 200,  capacity: 2,             icon: 'Footprints', cover: '/img/services/boots.webp',    accent: 'periwinkle' },
-  { id: 'fisioterapia', slug: 'fisio',      i18nKey: 'fisio',    pillar: 'recovery', durationMin: 60, priceMxn: 1000, priceRange: [500, 1000], capacity: 1, icon: 'Activity',   cover: '/img/services/fisio.webp',    accent: 'cobalt' },
-  { id: 'stem-cells',   slug: 'stem',       i18nKey: 'stem',     pillar: 'vitality', durationMin: 30, priceMxn: 0,    capacity: 1,             icon: 'Dna',        cover: '/img/services/stem.webp',     accent: 'mint' },
+  { id: 'iv-vip',       slug: 'iv',         i18nKey: 'iv',       pillar: 'recovery', durationMin: 60, priceMxn: 1500, priceRange: [900, 4800], capacity: 2, icon: 'Droplet',    cover: '/img/services/iv.webp?v=12',       accent: 'cobalt' },
+  { id: 'masoterapia',  slug: 'masajes',    i18nKey: 'massage',  pillar: 'recovery', durationMin: 60, priceMxn: 800,  priceRange: [650, 1200], capacity: 1, icon: 'Hand',       cover: '/img/services/massage.webp?v=12',  accent: 'periwinkle' },
+  { id: 'sauna',        slug: 'sauna',      i18nKey: 'sauna',    pillar: 'recovery', durationMin: 30, priceMxn: 355,  capacity: 2,             icon: 'Flame',      cover: '/img/services/sauna.webp?v=12',    accent: 'amber' },
+  { id: 'cryo',         slug: 'cryo',       i18nKey: 'cryo',     pillar: 'recovery', durationMin: 3,  priceMxn: 900,  capacity: 1,             icon: 'Snowflake',  cover: '/img/services/cryo.webp?v=12',     accent: 'cobalt' },
+  { id: 'ice-plunge',   slug: 'ice',        i18nKey: 'ice',      pillar: 'recovery', durationMin: 15, priceMxn: 500,  capacity: 1,             icon: 'Waves',      cover: '/img/services/ice.webp?v=12',      accent: 'mint' },
+  { id: 'red-light',    slug: 'red-light',  i18nKey: 'redlight', pillar: 'beauty',   durationMin: 30, priceMxn: 600,  capacity: 1,             icon: 'Sun',        cover: '/img/services/redlight.webp?v=12', accent: 'amber' },
+  { id: 'boots',        slug: 'botas',      i18nKey: 'boots',    pillar: 'recovery', durationMin: 30, priceMxn: 200,  capacity: 2,             icon: 'Footprints', cover: '/img/services/boots.webp?v=12',    accent: 'periwinkle' },
+  { id: 'fisioterapia', slug: 'fisio',      i18nKey: 'fisio',    pillar: 'recovery', durationMin: 60, priceMxn: 1000, priceRange: [500, 1000], capacity: 1, icon: 'Activity',   cover: '/img/services/fisio.webp?v=12',    accent: 'cobalt' },
+  { id: 'stem-cells',   slug: 'stem',       i18nKey: 'stem',     pillar: 'vitality', durationMin: 30, priceMxn: 0,    capacity: 1,             icon: 'Dna',        cover: '/img/services/stem.webp?v=12',     accent: 'mint' },
 ]
 
 /* ────────────────────────────────────────────────────────────
